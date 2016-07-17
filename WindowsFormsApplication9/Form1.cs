@@ -879,5 +879,27 @@ namespace WindowsFormsApplication9
             }
 
         }
+
+        private void btnDP刪除_Click(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "delete from OrderDetail where product_name=@OldName";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue("@OldName", tbDPpname.Text);
+
+            int rows = cmd.ExecuteNonQuery();
+            con.Close();
+            MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
+
+           tborder_no.Text="";
+           tbDPp_no.Text="";
+           tbDPpname.Text="";
+           tbDPprice.Text="";
+           tbDPorderqty.Text="";
+           tbDPshipqty.Text = "";
+           showDataGridView5();
+
+        }
     }
 }

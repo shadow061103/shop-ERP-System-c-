@@ -297,6 +297,7 @@
             this.btnDP刪除.TabIndex = 69;
             this.btnDP刪除.Text = "刪除";
             this.btnDP刪除.UseVisualStyleBackColor = false;
+            this.btnDP刪除.Click += new System.EventHandler(this.btnDP刪除_Click);
             // 
             // btnDP修改
             // 
