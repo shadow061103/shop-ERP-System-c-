@@ -913,8 +913,8 @@ namespace WindowsFormsApplication9
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
                 string strSQL = "update OrderDetail set  order_qty=@Neworderqty,"
-                  + "order_shipqty=@Newordershipqty,order_totalcost=@Newctotalcost,"
-                 + "where product_no=@Searchproductno";
+                  + "order_shipqty=@Newordershipqty,order_totalcost=@Newctotalcost"
+                 + " where product_no=@Searchproductno";
 
                 SqlCommand cmd = new SqlCommand(strSQL, con);
                 cmd.Parameters.AddWithValue(@"Neworderqty", tbDPorderqty.Text);
