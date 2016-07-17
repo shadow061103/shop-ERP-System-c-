@@ -30,6 +30,8 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btn查詢 = new System.Windows.Forms.Button();
+            this.btn清空 = new System.Windows.Forms.Button();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -51,6 +53,7 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.dataGridView6 = new System.Windows.Forms.DataGridView();
             this.tbreceiveremail = new System.Windows.Forms.TextBox();
             this.tbreceiveraddress = new System.Windows.Forms.TextBox();
             this.tbreceiverpost = new System.Windows.Forms.TextBox();
@@ -110,9 +113,6 @@
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.btnO查詢 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.dataGridView6 = new System.Windows.Forms.DataGridView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -122,6 +122,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).BeginInit();
@@ -129,7 +130,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -148,8 +148,8 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.tabPage1.Controls.Add(this.button1);
-            this.tabPage1.Controls.Add(this.button2);
+            this.tabPage1.Controls.Add(this.btn查詢);
+            this.tabPage1.Controls.Add(this.btn清空);
             this.tabPage1.Controls.Add(this.tabControl2);
             this.tabPage1.Controls.Add(this.tb總計);
             this.tabPage1.Controls.Add(this.label13);
@@ -166,6 +166,30 @@
             this.tabPage1.Size = new System.Drawing.Size(1261, 681);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "訂單資料";
+            // 
+            // btn查詢
+            // 
+            this.btn查詢.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btn查詢.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btn查詢.Location = new System.Drawing.Point(49, 313);
+            this.btn查詢.Name = "btn查詢";
+            this.btn查詢.Size = new System.Drawing.Size(155, 30);
+            this.btn查詢.TabIndex = 66;
+            this.btn查詢.Text = "查詢訂單編號";
+            this.btn查詢.UseVisualStyleBackColor = false;
+            this.btn查詢.Click += new System.EventHandler(this.btn查詢_Click);
+            // 
+            // btn清空
+            // 
+            this.btn清空.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btn清空.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btn清空.Location = new System.Drawing.Point(827, 313);
+            this.btn清空.Name = "btn清空";
+            this.btn清空.Size = new System.Drawing.Size(157, 30);
+            this.btn清空.TabIndex = 65;
+            this.btn清空.Text = "清空欄位/返回";
+            this.btn清空.UseVisualStyleBackColor = false;
+            this.btn清空.Click += new System.EventHandler(this.btn清空_Click);
             // 
             // tabControl2
             // 
@@ -242,12 +266,13 @@
             // 
             this.btnO加入常客資料.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.btnO加入常客資料.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnO加入常客資料.Location = new System.Drawing.Point(634, 314);
+            this.btnO加入常客資料.Location = new System.Drawing.Point(646, 313);
             this.btnO加入常客資料.Name = "btnO加入常客資料";
             this.btnO加入常客資料.Size = new System.Drawing.Size(155, 29);
             this.btnO加入常客資料.TabIndex = 53;
             this.btnO加入常客資料.Text = "加入常客資料";
             this.btnO加入常客資料.UseVisualStyleBackColor = false;
+            this.btnO加入常客資料.Click += new System.EventHandler(this.btnO加入常客資料_Click);
             // 
             // btnO刪除
             // 
@@ -396,6 +421,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "收貨人資訊";
             // 
+            // dataGridView6
+            // 
+            this.dataGridView6.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView6.Location = new System.Drawing.Point(431, 264);
+            this.dataGridView6.Name = "dataGridView6";
+            this.dataGridView6.RowTemplate.Height = 24;
+            this.dataGridView6.Size = new System.Drawing.Size(240, 150);
+            this.dataGridView6.TabIndex = 11;
+            // 
             // tbreceiveremail
             // 
             this.tbreceiveremail.Location = new System.Drawing.Point(97, 229);
@@ -419,6 +453,7 @@
             // 
             // tbreceiverphone
             // 
+            this.tbreceiverphone.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.tbreceiverphone.Location = new System.Drawing.Point(158, 89);
             this.tbreceiverphone.Name = "tbreceiverphone";
             this.tbreceiverphone.Size = new System.Drawing.Size(214, 35);
@@ -426,6 +461,7 @@
             // 
             // tbreceiver
             // 
+            this.tbreceiver.BackColor = System.Drawing.Color.White;
             this.tbreceiver.Location = new System.Drawing.Point(158, 34);
             this.tbreceiver.Name = "tbreceiver";
             this.tbreceiver.Size = new System.Drawing.Size(168, 35);
@@ -539,6 +575,7 @@
             // 
             // tborder_no
             // 
+            this.tborder_no.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.tborder_no.Location = new System.Drawing.Point(197, 26);
             this.tborder_no.Name = "tborder_no";
             this.tborder_no.Size = new System.Drawing.Size(100, 35);
@@ -1005,37 +1042,6 @@
             this.btnO查詢.Text = "查詢";
             this.btnO查詢.UseVisualStyleBackColor = false;
             // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.button1.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.button1.Location = new System.Drawing.Point(827, 314);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(108, 30);
-            this.button1.TabIndex = 66;
-            this.button1.Text = "查詢";
-            this.button1.UseVisualStyleBackColor = false;
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.button2.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.button2.Location = new System.Drawing.Point(957, 314);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(157, 30);
-            this.button2.TabIndex = 65;
-            this.button2.Text = "清空欄位/返回";
-            this.button2.UseVisualStyleBackColor = false;
-            // 
-            // dataGridView6
-            // 
-            this.dataGridView6.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView6.Location = new System.Drawing.Point(431, 264);
-            this.dataGridView6.Name = "dataGridView6";
-            this.dataGridView6.RowTemplate.Height = 24;
-            this.dataGridView6.Size = new System.Drawing.Size(240, 150);
-            this.dataGridView6.TabIndex = 11;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1058,6 +1064,7 @@
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
@@ -1068,7 +1075,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1157,8 +1163,8 @@
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.DataGridView dataGridView5;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btn查詢;
+        private System.Windows.Forms.Button btn清空;
         private System.Windows.Forms.DataGridView dataGridView6;
     }
 }

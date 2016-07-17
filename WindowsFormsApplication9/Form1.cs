@@ -137,13 +137,36 @@ namespace WindowsFormsApplication9
 
         private void btnO刪除_Click(object sender, EventArgs e)
         {
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "delete from OrderMaster where order_no=@orderno";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
 
+            int rows = cmd.ExecuteNonQuery();
+            con.Close();
+            MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
+
+
+            tborder_no.Text = "";
+            tbfreight.Text = "";
+            dtporderdata.Value = DateTime.Now;
+            cboxpaymethod.Text = "";
+            cboxorder_status.Text = "";
+            tbreceiver.Text = "";
+            tbreceiveraddress.Text = "";
+            tbreceiverphone.Text = "";
+            tbreceiverpost.Text = "";
+            tbreceiveremail.Text = "";
+            cboxAR.Text = "";
+            cboxshipcheckstatus.Text = "";
+            dtpshipdate.Value = DateTime.Now;
+            dtpclosedate.Value = DateTime.Now;
+            showDataGridView1();
+           
         }
 
-        private void btnO儲存_Click(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void btnO查詢_Click(object sender, EventArgs e)
         {
@@ -268,7 +291,7 @@ namespace WindowsFormsApplication9
             }
             else
             {
-                MessageBox.Show("請輸入手機號碼搜尋");
+                MessageBox.Show("請輸入姓名搜尋");
             }
 
         }
@@ -476,6 +499,27 @@ namespace WindowsFormsApplication9
             con.Close();
 
         }
+        private void showDataGridView1_1()
+        {//訂單主檔
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select order_no as 訂單編號,order_date as 訂單日期,order_shipdate as 訂單出貨日,order_shipcheckstatus as 物流出貨確認狀態,order_receiver as 收貨人,order_phone as 收貨人手機,"
+                       + "receiver_post as 收貨人郵遞區號,receiver_address as 收貨人地址,receiver_email as 收貨人email,freight_fee as 物流費用,pay_method as 付款方式,account_receive as 是否收款,order_status as 訂單結案狀態,"
+                      + " order_closedate as 訂單結案日期 from OrderMaster where order_no=@orderno ";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView1.DataSource = ds;
+            }
+            reader.Close();
+            con.Close();
+
+        }
         private void showDataGridView4_1()
         {
             SqlConnection con = new SqlConnection(scsb.ToString());
@@ -596,6 +640,122 @@ namespace WindowsFormsApplication9
             }
             reader.Close();
             con.Close();
+        }
+
+        private void btn查詢_Click(object sender, EventArgs e)
+        {
+            if (tborder_no.Text.Length>0)
+            {
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "select*from OrderMaster where order_no=@orderno";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+                cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
+
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                showDataGridView1_1();
+                if (reader.Read())//有讀到資料
+                {
+
+
+                    tborder_no.Text = String.Format("{0}", reader["order_no"]);
+                    tbfreight.Text = String.Format("{0}", reader["freight_fee"]);
+                    dtporderdata.Value = (DateTime)reader["order_date"];
+                    cboxpaymethod.Text = String.Format("{0}", reader["pay_method"]);
+                    cboxorder_status.Text = String.Format("{0}", reader["order_status"]);
+                    tbreceiver.Text = String.Format("{0}", reader["order_receiver"]);
+                    tbreceiveraddress.Text = String.Format("{0}", reader["receiver_address"]);
+                    tbreceiverphone.Text = String.Format("{0}", reader["order_phone"]);
+                    tbreceiverpost.Text = String.Format("{0}", reader["receiver_post"]);
+                    tbreceiveremail.Text = String.Format("{0}", reader["receiver_email"]);
+                    cboxAR.Text = String.Format("{0}", reader["account_receive"]);
+                    cboxshipcheckstatus.Text = String.Format("{0}", reader["order_shipcheckstatus"]);
+                    dtpshipdate.Value = (DateTime)reader["order_shipdate"];
+                    dtpclosedate.Value = (DateTime)reader["order_closedate"];
+
+                }
+                    
+                else
+                {
+                    MessageBox.Show("查無此訂單!!");
+                    
+
+                }
+                reader.Close();
+                con.Close();
+
+            }
+            else
+            {
+                MessageBox.Show("請輸入訂單編號搜尋");
+            }
+        }
+
+        private void btn清空_Click(object sender, EventArgs e)
+        {
+            tborder_no.Text = "";
+            tbfreight.Text = "";
+            dtporderdata.Value = DateTime.Now;
+            cboxpaymethod.Text = "";
+            cboxorder_status.Text = "";
+            tbreceiver.Text = "";
+            tbreceiveraddress.Text = "";
+            tbreceiverphone.Text = "";
+            tbreceiverpost.Text = "";
+            tbreceiveremail.Text = "";
+            cboxAR.Text = "";
+            cboxshipcheckstatus.Text = "";
+            dtpshipdate.Value = DateTime.Now;
+            dtpclosedate.Value = DateTime.Now;
+            showDataGridView1();
+        }
+
+        private void btnO加入常客資料_Click(object sender, EventArgs e)
+        {
+            if (tbreceiverphone.Text.Length>0)
+            {
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "select*from customer where customer_phone = @searchphone";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+                cmd.Parameters.AddWithValue(@"searchphone", tbreceiverphone.Text);
+
+
+                SqlDataReader reader = cmd.ExecuteReader();
+               
+                if (reader.Read())//有讀到資料
+                {
+                    tbreceiver.Text = String.Format("{0}", reader["customer_name"]);
+                    tbreceiverpost.Text = String.Format("{0}", reader["customer_post"]);
+                    tbreceiveraddress.Text = String.Format("{0}", reader["customer_address"]);
+                    tbreceiveremail.Text = String.Format("{0}", reader["customer_email"]);
+                    tbreceiverphone.Text = String.Format("{0}", reader["customer_phone"]);
+
+
+
+                }
+                else
+                {
+                    MessageBox.Show("查無此人!!");
+                    tbreceiver.Text = "";
+                    tbreceiverpost.Text = "";
+                    tbreceiveraddress.Text ="";
+                    tbreceiveremail.Text = "";
+                    tbreceiverphone.Text = "";
+
+
+
+                }
+                reader.Close();
+                con.Close();
+
+            }
+            else
+            {
+                MessageBox.Show("請輸入正確手機號碼");
+            }
+
         }
     }
 }
