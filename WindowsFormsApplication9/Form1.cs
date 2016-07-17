@@ -21,6 +21,8 @@ namespace WindowsFormsApplication9
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // TODO:  這行程式碼會將資料載入 'project1DataSet.Product' 資料表。您可以視需要進行移動或移除。
+            this.productTableAdapter.Fill(this.project1DataSet.Product);
              scsb = new SqlConnectionStringBuilder();
            
             //scsb.DataSource = "CR1-16";
@@ -776,6 +778,71 @@ namespace WindowsFormsApplication9
                 MessageBox.Show("請輸入正確手機號碼");
             }
 
+        }
+
+        private void detail_cellclick(object sender, DataGridViewCellEventArgs e)
+        {
+            string strQueryID = dataGridView5.Rows[e.RowIndex].Cells[0].Value.ToString();
+
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select*from OrderDetail where order_no=@QUERYID";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+
+            cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                tbDPp_no.Text = String.Format("{0}", reader["product_no"]);
+                tbDPpname.Text = String.Format("{0}", reader["product_name"]);
+                tbDPprice.Text = String.Format("{0}", reader["unitprice"]);
+                tbDPorderqty.Text = String.Format("{0}", reader["order_qty"]);
+                tbDPshipqty.Text = String.Format("{0}", reader["order_shipqty"]);
+
+               
+                
+            }
+            reader.Close();
+            con.Close();
+        }
+
+        private void datail_selectchange(object sender, EventArgs e)
+        {
+            if (cboxDPpname.Text.Length>0)
+            {
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "select*from Product where product_name=@searchname";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+                cmd.Parameters.AddWithValue("@searchname", cboxDPpname.Text);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                
+                if (reader.Read())//有讀到資料
+                {
+
+
+                  tbDPp_no.Text = String.Format("{0}", reader["product_no"]);
+                  tbDPpname.Text = String.Format("{0}", reader["product_name"]);
+                  tbDPprice.Text = String.Format("{0}", reader["product_price"]);
+
+
+
+                }
+                else
+                {
+                    MessageBox.Show("查無產品!!");
+                   tbDPp_no.Text = "";
+                  tbDPpname.Text = "";
+                  tbDPprice.Text = "";
+
+
+                }
+                reader.Close();
+               con.Close();
+
+            }
+            
         }
     }
 }
