@@ -319,6 +319,7 @@
             this.btnDP新增.TabIndex = 67;
             this.btnDP新增.Text = "新增";
             this.btnDP新增.UseVisualStyleBackColor = false;
+            this.btnDP新增.Click += new System.EventHandler(this.btnDP新增_Click);
             // 
             // cboxDPpname
             // 
