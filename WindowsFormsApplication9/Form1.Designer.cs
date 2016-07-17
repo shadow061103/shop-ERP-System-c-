@@ -309,6 +309,7 @@
             this.btnDP修改.TabIndex = 68;
             this.btnDP修改.Text = "修改";
             this.btnDP修改.UseVisualStyleBackColor = false;
+            this.btnDP修改.Click += new System.EventHandler(this.btnDP修改_Click);
             // 
             // btnDP新增
             // 

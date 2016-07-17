@@ -901,5 +901,38 @@ namespace WindowsFormsApplication9
            showDataGridView5();
 
         }
+
+        private void btnDP修改_Click(object sender, EventArgs e)
+        {
+            if (tbDPp_no.Text.Length>0)
+            {
+                double total = 0;
+                double price = Convert.ToDouble(tbDPprice.Text);
+                double qty = Convert.ToDouble(tbDPshipqty.Text);
+                total = price * qty;
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "update OrderDetail set  order_qty=@Neworderqty,"
+                  + "order_shipqty=@Newordershipqty,order_totalcost=@Newctotalcost,"
+                 + "where product_no=@Searchproductno";
+
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+                cmd.Parameters.AddWithValue(@"Neworderqty", tbDPorderqty.Text);
+                cmd.Parameters.AddWithValue(@"Newordershipqty", tbDPshipqty.Text);
+                cmd.Parameters.AddWithValue(@"Searchproductno",tbDPp_no.Text );
+                cmd.Parameters.AddWithValue(@"Newctotalcost", total);
+
+                int rows = cmd.ExecuteNonQuery();//執行但不查詢  會回傳整數值(異動幾筆資料)
+                con.Close();
+                MessageBox.Show(String.Format("資料更新完畢,共影響{0}筆資料", rows));
+                showDataGridView5();
+            }
+            else
+            {
+                MessageBox.Show("請選擇產品");
+
+
+            }
+        }
     }
 }
