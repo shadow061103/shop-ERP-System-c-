@@ -31,6 +31,7 @@ namespace WindowsFormsApplication9
             showDataGridView2();//產品資料表
             showDataGridView4();//客戶資料
             showDataGridView1();//訂單主檔
+            showDataGridView5();//訂單明細
         }
 
         private void btnO第一筆_Click(object sender, EventArgs e)
@@ -474,6 +475,25 @@ namespace WindowsFormsApplication9
                 DataTable ds = new DataTable();
                 ds.Load(reader);
                 dataGridView4.DataSource = ds;
+            }
+            reader.Close();
+            con.Close();
+
+        }
+        private void showDataGridView5()
+        {//訂單主檔
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select order_no as 訂單編號,product_no as 產品編號,unitprice as 單價,"
+            +"order_qty  as 訂購數量,order_shipqty as 出貨數量,order_totalcost as 小計 from OrderDetail ";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView5.DataSource = ds;
             }
             reader.Close();
             con.Close();
