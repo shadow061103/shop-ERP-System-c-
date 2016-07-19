@@ -494,12 +494,11 @@ namespace WindowsFormsApplication9
         }
         private void showDataGridView5()
         {//訂單主檔
-           /* int a = 0;
-            if (tborder_no.Text != "") {  a = Convert.ToInt32(tborder_no.Text); }*/
+           
             
             SqlConnection con = new SqlConnection(scsb.ToString());
             con.Open();
-            string strSQL = "select order_no as 訂單編號,product_no as 產品編號,unitprice as 單價,"
+            string strSQL = "select order_no as 訂單編號,product_no as 產品編號,product_name as 產品名稱,unitprice as 單價,"
             + "order_qty  as 訂購數量,order_shipqty as 出貨數量,order_totalcost as 小計 from OrderDetail where order_no=@orderno";
             SqlCommand cmd = new SqlCommand(strSQL, con);
             cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
@@ -886,8 +885,10 @@ namespace WindowsFormsApplication9
                 total = price * qty;
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
-                string strSQL = "insert into OrderDetail values(@orderno,@productno,@productname,@unitprice,@orderqty,@ordershipqty,@total) ";
-
+                string strSQL = "insert into OrderDetail values(@orderno,@productno,@productname,"
+                +"@unitprice,(case @orderqty when null then 0 when '' then 0 else @orderqty end),"
+                +"(case @ordershipqty when null then 0 when '' then 0 else @ordershipqty end),@total) ";
+              
                 SqlCommand cmd = new SqlCommand(strSQL, con);
                 cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
                 cmd.Parameters.AddWithValue(@"productno", tbDPp_no.Text);
@@ -943,9 +944,9 @@ namespace WindowsFormsApplication9
                 total = price * qty;
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
-                string strSQL = "update OrderDetail set  order_qty=@Neworderqty,"
-                  + "order_shipqty=@Newordershipqty,order_totalcost=@Newctotalcost"
-                 + " where product_no=@Searchproductno";
+                string strSQL = "update OrderDetail set  order_qty=(case @orderqty when null then 0 when '' then 0 else @orderqty end),"
+                  + "order_shipqty=(case @ordershipqty when null then 0 when '' then 0 else @ordershipqty end)"
+                  +",order_totalcost=@Newctotalcost where product_no=@Searchproductno";
 
                 SqlCommand cmd = new SqlCommand(strSQL, con);
                 cmd.Parameters.AddWithValue(@"Neworderqty", tbDPorderqty.Text);
@@ -968,7 +969,29 @@ namespace WindowsFormsApplication9
 
         private void tborder_no_TextChanged(object sender, EventArgs e)
         {
-            showDataGridView5();
+            showDataGridView5();//明細表資料
+
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "select sum(order_totalcost) as sum from OrderDetail"
+                +" where order_no=@orderno group by order_no ";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+                cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
+
+               SqlDataReader reader = cmd.ExecuteReader();
+               if (reader.Read())//有讀到資料
+               {
+
+               tb總計.Text = String.Format("{0}", reader["sum"]);
+                   
+                }
+               else tb總計.Text = "0";
+                reader.Close();
+                con.Close();
+
+           
+
+
         }
     }
 }
