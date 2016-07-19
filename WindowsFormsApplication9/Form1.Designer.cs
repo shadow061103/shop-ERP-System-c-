@@ -523,8 +523,9 @@
             this.cboxshipcheckstatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxshipcheckstatus.FormattingEnabled = true;
             this.cboxshipcheckstatus.Items.AddRange(new object[] {
-            "1.處理中",
-            "2.已出貨"});
+            "1.店內購",
+            "2.處理中",
+            "3.已出貨"});
             this.cboxshipcheckstatus.Location = new System.Drawing.Point(236, 90);
             this.cboxshipcheckstatus.Name = "cboxshipcheckstatus";
             this.cboxshipcheckstatus.Size = new System.Drawing.Size(121, 34);
@@ -728,9 +729,9 @@
             this.cboxorder_status.FormattingEnabled = true;
             this.cboxorder_status.Items.AddRange(new object[] {
             "1.正常出貨",
-            "2.延遲出貨",
-            "3.斷貨無法出",
-            "4.未出貨",
+            "2.未出貨",
+            "3.延遲出貨",
+            "4.斷貨無法出",
             "5.出貨前取消訂單"});
             this.cboxorder_status.Location = new System.Drawing.Point(150, 219);
             this.cboxorder_status.Name = "cboxorder_status";

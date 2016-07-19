@@ -66,9 +66,10 @@ namespace WindowsFormsApplication9
             {
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
-                string strSQL = @"insert into OrderMaster values (@Neworderdata,@Newshipdate,@shipcheckstatus,@Newreceiver,@Newphone,@Newpost,@NewAddress,@NewEmail,
-                (case @Newfreight when null then 0 when '' then 0 else @Newfreight end),
-                @Newpaymethod,@NewAr ,@Neworder_status,@Newclosedate)";
+                string strSQL = "insert into OrderMaster values (@Neworderdata,@Newshipdate,@shipcheckstatus,"
+                + "(case @Newreceiver when '' then '到店購買顧客' else @Newreceiver end),@Newphone,@Newpost,@NewAddress,@NewEmail,"
+               +" (case @Newfreight when null then 0 when '' then 0 else @Newfreight end),"
+                +"@Newpaymethod,@NewAr ,@Neworder_status,@Newclosedate)";
                 SqlCommand cmd = new SqlCommand(strSQL, con);
 
 
@@ -108,8 +109,10 @@ namespace WindowsFormsApplication9
                 con.Open();
                 string strSQL = "update OrderMaster set order_date=@Neworderdata,"
                 +"order_shipdate=@Newshipdate,order_shipcheckstatus=@shipcheckstatus,"
-                +"order_receiver=@Newreceiver,order_phone=@Newphone,receiver_post=@Newpost,"
-                +"receiver_address=@NewAddress,receiver_email=@NewEmail,freight_fee=@Newfreight"
+                + "order_receiver=(case @Newreceiver when '' then '到店購買顧客' else @Newreceiver end),"
+                +"order_phone=@Newphone,receiver_post=@Newpost,"
+                + "receiver_address=@NewAddress,receiver_email=@NewEmail,"
+                +"freight_fee=(case @Newfreight when null then 0 when '' then 0 else @Newfreight end)"
                 +",pay_method=@Newpaymethod,account_receive=@NewAr ,order_status=@Neworder_status"
                 + ",order_closedate=@Newclosedate where order_no=@orderno";
 
@@ -309,8 +312,10 @@ namespace WindowsFormsApplication9
             {
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
-                string strSQL = "insert into Product values(@productname,@productspec,@productcost,@productprice ) ";
-
+                string strSQL = "insert into Product values(@productname,@productspec,"
+                    +"(case @productcost when null then 0 when '' then 0 else @productcost end),"
+                    +"(case @productprice when null then 0 when '' then 0 else @productprice end) ) ";
+                
                 SqlCommand cmd = new SqlCommand(strSQL, con);
                 cmd.Parameters.AddWithValue(@"productname", tbproductname.Text);
                 cmd.Parameters.AddWithValue(@"productspec", tbproductspec.Text);
@@ -337,8 +342,9 @@ namespace WindowsFormsApplication9
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
                 string strSQL = "update Product set  product_spec=@Newproductspec,"
-                    + "product_cost=@Newproductcost, product_price=@Newproductprice"
-                    + " where product_name=@Searchname";
+                + "product_cost=(case @productcost when null then 0 when '' then 0 else @productcost end), "
+                + "product_price=(case @productprice when null then 0 when '' then 0 else @productprice end) "
+                 + " where product_name=@Searchname";
                 SqlCommand cmd = new SqlCommand(strSQL, con);
                 cmd.Parameters.AddWithValue(@"Searchname", tbproductname.Text);
                 cmd.Parameters.AddWithValue(@"Newproductspec", tbproductspec.Text);
@@ -572,27 +578,30 @@ namespace WindowsFormsApplication9
         }
         private void productgridview_cellclick(object sender, DataGridViewCellEventArgs e)
         {
-            string strQueryID = dataGridView2.Rows[e.RowIndex].Cells[0].Value.ToString();
-
-            SqlConnection con = new SqlConnection(scsb.ToString());
-            con.Open();
-            string strSQL = "select*from Product where product_no=@QUERYID";
-            SqlCommand cmd = new SqlCommand(strSQL, con);
-
-            cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.Read())
+            if (e.RowIndex != -1)
             {
-                tbproductno.Text = String.Format("{0}", reader["product_no"]);
-                tbproductname.Text = String.Format("{0}", reader["product_name"]);
-                tbproductspec.Text = String.Format("{0}", reader["product_spec"]);
-                tbproductcost.Text = String.Format("{0}", reader["product_cost"]);
-                tbproductprice.Text = String.Format("{0}", reader["product_price"]);
-               
+                string strQueryID = dataGridView2.Rows[e.RowIndex].Cells[0].Value.ToString();
 
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "select*from Product where product_no=@QUERYID";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+
+                cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    tbproductno.Text = String.Format("{0}", reader["product_no"]);
+                    tbproductname.Text = String.Format("{0}", reader["product_name"]);
+                    tbproductspec.Text = String.Format("{0}", reader["product_spec"]);
+                    tbproductcost.Text = String.Format("{0}", reader["product_cost"]);
+                    tbproductprice.Text = String.Format("{0}", reader["product_price"]);
+
+
+                }
+                reader.Close();
+                con.Close();
             }
-            reader.Close();
-            con.Close();
         }
 
         private void btnP清空_Click(object sender, EventArgs e)
@@ -617,64 +626,69 @@ namespace WindowsFormsApplication9
 
         private void customergridview_cellclick(object sender, DataGridViewCellEventArgs e)
         {
-            string strQueryID = dataGridView4.Rows[e.RowIndex].Cells[0].Value.ToString();
-
-            SqlConnection con = new SqlConnection(scsb.ToString());
-            con.Open();
-            string strSQL = "select*from customer where customer_no=@QUERYID";
-            SqlCommand cmd = new SqlCommand(strSQL, con);
-
-            cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.Read())
+            if (e.RowIndex != -1)
             {
-                tbcustomer.Text = String.Format("{0}", reader["customer_name"]);
-                tbcustomerpost.Text = String.Format("{0}", reader["customer_post"]);
-                tbcustomeraddress.Text = String.Format("{0}", reader["customer_address"]);
-                tbcustomeremail.Text = String.Format("{0}", reader["customer_email"]);
-                tbcustomerphone.Text = String.Format("{0}", reader["customer_phone"]);
+                string strQueryID = dataGridView4.Rows[e.RowIndex].Cells[0].Value.ToString();
+
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "select*from customer where customer_no=@QUERYID";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+
+                cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    tbcustomer.Text = String.Format("{0}", reader["customer_name"]);
+                    tbcustomerpost.Text = String.Format("{0}", reader["customer_post"]);
+                    tbcustomeraddress.Text = String.Format("{0}", reader["customer_address"]);
+                    tbcustomeremail.Text = String.Format("{0}", reader["customer_email"]);
+                    tbcustomerphone.Text = String.Format("{0}", reader["customer_phone"]);
 
 
+                }
+                reader.Close();
+                con.Close();
             }
-            reader.Close();
-            con.Close();
         }
 
         private void datagridview_cellcheck(object sender, DataGridViewCellEventArgs e)
         {
-            
-            string strQueryID = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-            string strSQL = "";
-
-            SqlConnection con = new SqlConnection(scsb.ToString());
-            con.Open();
-            if (e.RowIndex == -1) { strSQL = "select*from OrderMaster where order_no=1"; }
-            else { strSQL = "select*from OrderMaster where order_no=@QUERYID"; }
-            
-            SqlCommand cmd = new SqlCommand(strSQL, con);
-
-            cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
-            SqlDataReader reader = cmd.ExecuteReader();
-            
-            if (reader.Read())
+            if (e.RowIndex != -1)
             {
-                tborder_no.Text = String.Format("{0}", reader["order_no"]);
-                tbfreight.Text = String.Format("{0}", reader["freight_fee"]);
-                dtporderdata.Value = (DateTime)reader["order_date"];
-                cboxpaymethod.Text = String.Format("{0}", reader["pay_method"]);
-                cboxorder_status.Text = String.Format("{0}", reader["order_status"]);
-                tbreceiver.Text = String.Format("{0}", reader["order_receiver"]);
-                tbreceiveraddress.Text = String.Format("{0}", reader["receiver_address"]);
-                tbreceiverphone.Text = String.Format("{0}", reader["order_phone"]);
-                tbreceiverpost.Text = String.Format("{0}", reader["receiver_post"]);
-                tbreceiveremail.Text = String.Format("{0}", reader["receiver_email"]);
-                cboxAR.Text=String.Format("{0}", reader["account_receive"]);
-                cboxshipcheckstatus.Text=String.Format("{0}", reader["order_shipcheckstatus"]);
-                dtpshipdate.Value = (DateTime)reader["order_shipdate"];
-                dtpclosedate.Value = (DateTime)reader["order_closedate"];              
+                string strQueryID = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+               
+
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                
+             string strSQL = "select*from OrderMaster where order_no=@QUERYID"; 
+
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+
+                cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    tborder_no.Text = String.Format("{0}", reader["order_no"]);
+                    tbfreight.Text = String.Format("{0}", reader["freight_fee"]);
+                    dtporderdata.Value = (DateTime)reader["order_date"];
+                    cboxpaymethod.Text = String.Format("{0}", reader["pay_method"]);
+                    cboxorder_status.Text = String.Format("{0}", reader["order_status"]);
+                    tbreceiver.Text = String.Format("{0}", reader["order_receiver"]);
+                    tbreceiveraddress.Text = String.Format("{0}", reader["receiver_address"]);
+                    tbreceiverphone.Text = String.Format("{0}", reader["order_phone"]);
+                    tbreceiverpost.Text = String.Format("{0}", reader["receiver_post"]);
+                    tbreceiveremail.Text = String.Format("{0}", reader["receiver_email"]);
+                    cboxAR.Text = String.Format("{0}", reader["account_receive"]);
+                    cboxshipcheckstatus.Text = String.Format("{0}", reader["order_shipcheckstatus"]);
+                    dtpshipdate.Value = (DateTime)reader["order_shipdate"];
+                    dtpclosedate.Value = (DateTime)reader["order_closedate"];
+                }
+                reader.Close();
+                con.Close();
             }
-            reader.Close();
-            con.Close();
         }
 
         private void btn查詢_Click(object sender, EventArgs e)
@@ -732,15 +746,15 @@ namespace WindowsFormsApplication9
             tborder_no.Text = "";
             tbfreight.Text = "";
             dtporderdata.Value = DateTime.Now;
-            cboxpaymethod.Text = "";
-            cboxorder_status.Text = "";
+            cboxpaymethod.SelectedIndex = 0;
+            cboxorder_status.SelectedIndex = 0;
             tbreceiver.Text = "到店購買顧客";
             tbreceiveraddress.Text = "";
             tbreceiverphone.Text = "";
             tbreceiverpost.Text = "";
             tbreceiveremail.Text = "";
-            cboxAR.Text = "";
-            cboxshipcheckstatus.Text = "";
+            cboxAR.SelectedIndex = 0;
+            cboxshipcheckstatus.SelectedIndex = 0;
             dtpshipdate.Value = DateTime.Now;
             dtpclosedate.Value = DateTime.Now;
             showDataGridView1();
@@ -795,29 +809,32 @@ namespace WindowsFormsApplication9
 
         private void detail_cellclick(object sender, DataGridViewCellEventArgs e)
         {
-            string strQueryID = dataGridView5.Rows[e.RowIndex].Cells[0].Value.ToString();
-
-            SqlConnection con = new SqlConnection(scsb.ToString());
-            con.Open();
-            string strSQL = "select*from OrderDetail where order_no=@QUERYID";
-            SqlCommand cmd = new SqlCommand(strSQL, con);
-
-            cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
-            SqlDataReader reader = cmd.ExecuteReader();
-            
-            if (reader.Read())
+            if (e.RowIndex != -1)
             {
-                tbDPp_no.Text = String.Format("{0}", reader["product_no"]);
-                tbDPpname.Text = String.Format("{0}", reader["product_name"]);
-                tbDPprice.Text = String.Format("{0}", reader["unitprice"]);
-                tbDPorderqty.Text = String.Format("{0}", reader["order_qty"]);
-                tbDPshipqty.Text = String.Format("{0}", reader["order_shipqty"]);
+                string strQueryID = dataGridView5.Rows[e.RowIndex].Cells[0].Value.ToString();
 
-               
-                
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "select*from OrderDetail where order_no=@QUERYID";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+
+                cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    tbDPp_no.Text = String.Format("{0}", reader["product_no"]);
+                    tbDPpname.Text = String.Format("{0}", reader["product_name"]);
+                    tbDPprice.Text = String.Format("{0}", reader["unitprice"]);
+                    tbDPorderqty.Text = String.Format("{0}", reader["order_qty"]);
+                    tbDPshipqty.Text = String.Format("{0}", reader["order_shipqty"]);
+
+
+
+                }
+                reader.Close();
+                con.Close();
             }
-            reader.Close();
-            con.Close();
         }
 
         private void datail_selectchange(object sender, EventArgs e)
