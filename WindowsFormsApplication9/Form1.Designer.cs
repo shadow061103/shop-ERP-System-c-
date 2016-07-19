@@ -37,12 +37,16 @@
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.label31 = new System.Windows.Forms.Label();
             this.tbDPprice = new System.Windows.Forms.TextBox();
+            this.tbDPpname = new System.Windows.Forms.TextBox();
             this.label30 = new System.Windows.Forms.Label();
             this.btnDP刪除 = new System.Windows.Forms.Button();
             this.btnDP修改 = new System.Windows.Forms.Button();
             this.btnDP新增 = new System.Windows.Forms.Button();
             this.cboxDPpname = new System.Windows.Forms.ComboBox();
+            this.productBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.project1DataSet = new WindowsFormsApplication9.Project1DataSet();
             this.tbDPshipqty = new System.Windows.Forms.TextBox();
             this.tbDPorderqty = new System.Windows.Forms.TextBox();
             this.tbDPp_no = new System.Windows.Forms.TextBox();
@@ -127,16 +131,18 @@
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.btnO查詢 = new System.Windows.Forms.Button();
-            this.tbDPpname = new System.Windows.Forms.TextBox();
-            this.project1DataSet = new WindowsFormsApplication9.Project1DataSet();
-            this.productBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.productBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.project1DataSet1 = new WindowsFormsApplication9.Project1DataSet1();
             this.productTableAdapter = new WindowsFormsApplication9.Project1DataSetTableAdapters.ProductTableAdapter();
+            this.productTableAdapter1 = new WindowsFormsApplication9.Project1DataSet1TableAdapters.ProductTableAdapter();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -148,8 +154,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -249,6 +255,7 @@
             // tabPage6
             // 
             this.tabPage6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.tabPage6.Controls.Add(this.label31);
             this.tabPage6.Controls.Add(this.tbDPprice);
             this.tabPage6.Controls.Add(this.tbDPpname);
             this.tabPage6.Controls.Add(this.label30);
@@ -271,12 +278,30 @@
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "訂單明細";
             // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(935, 9);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(117, 26);
+            this.label31.TabIndex = 72;
+            this.label31.Text = "請選擇產品";
+            // 
             // tbDPprice
             // 
+            this.tbDPprice.Enabled = false;
             this.tbDPprice.Location = new System.Drawing.Point(814, 90);
             this.tbDPprice.Name = "tbDPprice";
             this.tbDPprice.Size = new System.Drawing.Size(100, 35);
             this.tbDPprice.TabIndex = 71;
+            // 
+            // tbDPpname
+            // 
+            this.tbDPpname.Enabled = false;
+            this.tbDPpname.Location = new System.Drawing.Point(814, 51);
+            this.tbDPpname.Name = "tbDPpname";
+            this.tbDPpname.Size = new System.Drawing.Size(100, 35);
+            this.tbDPpname.TabIndex = 70;
             // 
             // label30
             // 
@@ -334,6 +359,16 @@
             this.cboxDPpname.TabIndex = 66;
             this.cboxDPpname.SelectedIndexChanged += new System.EventHandler(this.datail_selectchange);
             // 
+            // productBindingSource
+            // 
+            this.productBindingSource.DataMember = "Product";
+            this.productBindingSource.DataSource = this.project1DataSet;
+            // 
+            // project1DataSet
+            // 
+            this.project1DataSet.DataSetName = "Project1DataSet";
+            this.project1DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
             // tbDPshipqty
             // 
             this.tbDPshipqty.Location = new System.Drawing.Point(814, 177);
@@ -350,6 +385,7 @@
             // 
             // tbDPp_no
             // 
+            this.tbDPp_no.Enabled = false;
             this.tbDPp_no.Location = new System.Drawing.Point(814, 6);
             this.tbDPp_no.Name = "tbDPp_no";
             this.tbDPp_no.Size = new System.Drawing.Size(100, 35);
@@ -484,6 +520,7 @@
             // 
             // cboxshipcheckstatus
             // 
+            this.cboxshipcheckstatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxshipcheckstatus.FormattingEnabled = true;
             this.cboxshipcheckstatus.Items.AddRange(new object[] {
             "1.處理中",
@@ -492,10 +529,10 @@
             this.cboxshipcheckstatus.Name = "cboxshipcheckstatus";
             this.cboxshipcheckstatus.Size = new System.Drawing.Size(121, 34);
             this.cboxshipcheckstatus.TabIndex = 11;
-            this.cboxshipcheckstatus.Text = "請選擇";
             // 
             // cboxAR
             // 
+            this.cboxAR.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxAR.FormattingEnabled = true;
             this.cboxAR.Items.AddRange(new object[] {
             "1.已收款",
@@ -504,7 +541,6 @@
             this.cboxAR.Name = "cboxAR";
             this.cboxAR.Size = new System.Drawing.Size(121, 34);
             this.cboxAR.TabIndex = 10;
-            this.cboxAR.Text = "請選擇";
             // 
             // dtpclosedate
             // 
@@ -688,6 +724,7 @@
             // 
             // cboxorder_status
             // 
+            this.cboxorder_status.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxorder_status.FormattingEnabled = true;
             this.cboxorder_status.Items.AddRange(new object[] {
             "1.正常出貨",
@@ -699,10 +736,10 @@
             this.cboxorder_status.Name = "cboxorder_status";
             this.cboxorder_status.Size = new System.Drawing.Size(190, 34);
             this.cboxorder_status.TabIndex = 9;
-            this.cboxorder_status.Text = "請選擇";
             // 
             // cboxpaymethod
             // 
+            this.cboxpaymethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxpaymethod.FormattingEnabled = true;
             this.cboxpaymethod.Items.AddRange(new object[] {
             "1.現金",
@@ -712,7 +749,6 @@
             this.cboxpaymethod.Name = "cboxpaymethod";
             this.cboxpaymethod.Size = new System.Drawing.Size(121, 34);
             this.cboxpaymethod.TabIndex = 8;
-            this.cboxpaymethod.Text = "請選擇";
             // 
             // dtporderdata
             // 
@@ -735,6 +771,7 @@
             this.tborder_no.Name = "tborder_no";
             this.tborder_no.Size = new System.Drawing.Size(100, 35);
             this.tborder_no.TabIndex = 5;
+            this.tborder_no.TextChanged += new System.EventHandler(this.tborder_no_TextChanged);
             // 
             // label5
             // 
@@ -1197,26 +1234,23 @@
             this.btnO查詢.Text = "查詢";
             this.btnO查詢.UseVisualStyleBackColor = false;
             // 
-            // tbDPpname
+            // productBindingSource1
             // 
-            this.tbDPpname.Location = new System.Drawing.Point(814, 51);
-            this.tbDPpname.Name = "tbDPpname";
-            this.tbDPpname.Size = new System.Drawing.Size(100, 35);
-            this.tbDPpname.TabIndex = 70;
+            this.productBindingSource1.DataMember = "Product";
+            this.productBindingSource1.DataSource = this.project1DataSet1;
             // 
-            // project1DataSet
+            // project1DataSet1
             // 
-            this.project1DataSet.DataSetName = "Project1DataSet";
-            this.project1DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // productBindingSource
-            // 
-            this.productBindingSource.DataMember = "Product";
-            this.productBindingSource.DataSource = this.project1DataSet;
+            this.project1DataSet1.DataSetName = "Project1DataSet1";
+            this.project1DataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // productTableAdapter
             // 
             this.productTableAdapter.ClearBeforeFill = true;
+            // 
+            // productTableAdapter1
+            // 
+            this.productTableAdapter1.ClearBeforeFill = true;
             // 
             // Form1
             // 
@@ -1236,6 +1270,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -1252,8 +1288,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1362,6 +1398,10 @@
         private Project1DataSet project1DataSet;
         private System.Windows.Forms.BindingSource productBindingSource;
         private Project1DataSetTableAdapters.ProductTableAdapter productTableAdapter;
+        private System.Windows.Forms.Label label31;
+        private Project1DataSet1 project1DataSet1;
+        private System.Windows.Forms.BindingSource productBindingSource1;
+        private Project1DataSet1TableAdapters.ProductTableAdapter productTableAdapter1;
     }
 }
 

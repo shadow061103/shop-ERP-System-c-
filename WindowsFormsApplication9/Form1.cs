@@ -21,6 +21,8 @@ namespace WindowsFormsApplication9
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // TODO:  這行程式碼會將資料載入 'project1DataSet1.Product' 資料表。您可以視需要進行移動或移除。
+           // this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
             // TODO:  這行程式碼會將資料載入 'project1DataSet.Product' 資料表。您可以視需要進行移動或移除。
             this.productTableAdapter.Fill(this.project1DataSet.Product);
              scsb = new SqlConnectionStringBuilder();
@@ -64,7 +66,9 @@ namespace WindowsFormsApplication9
             {
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
-                string strSQL = "insert into OrderMaster values (@Neworderdata,@Newshipdate,@shipcheckstatus,@Newreceiver,@Newphone,@Newpost,@NewAddress,@NewEmail,@Newfreight,@Newpaymethod,@NewAr ,@Neworder_status,@Newclosedate)";
+                string strSQL = @"insert into OrderMaster values (@Neworderdata,@Newshipdate,@shipcheckstatus,@Newreceiver,@Newphone,@Newpost,@NewAddress,@NewEmail,
+                (case @Newfreight when null then 0 when '' then 0 else @Newfreight end),
+                @Newpaymethod,@NewAr ,@Neworder_status,@Newclosedate)";
                 SqlCommand cmd = new SqlCommand(strSQL, con);
 
 
@@ -76,7 +80,7 @@ namespace WindowsFormsApplication9
                 cmd.Parameters.AddWithValue(@"Newpost", tbreceiverpost.Text);
                 cmd.Parameters.AddWithValue(@"NewAddress", tbreceiveraddress.Text);
                 cmd.Parameters.AddWithValue(@"NewEmail", tbreceiveremail.Text);
-                cmd.Parameters.AddWithValue(@"Newfreight", tbfreight.Text);
+                cmd.Parameters.AddWithValue(@"Newfreight",tbfreight.Text);
                 cmd.Parameters.AddWithValue(@"Newpaymethod", cboxpaymethod.Text);
                 cmd.Parameters.AddWithValue(@"NewAr", cboxAR.Text);
                 cmd.Parameters.AddWithValue(@"Neworder_status", cboxorder_status.Text);
@@ -484,11 +488,15 @@ namespace WindowsFormsApplication9
         }
         private void showDataGridView5()
         {//訂單主檔
+           /* int a = 0;
+            if (tborder_no.Text != "") {  a = Convert.ToInt32(tborder_no.Text); }*/
+            
             SqlConnection con = new SqlConnection(scsb.ToString());
             con.Open();
             string strSQL = "select order_no as 訂單編號,product_no as 產品編號,unitprice as 單價,"
-            +"order_qty  as 訂購數量,order_shipqty as 出貨數量,order_totalcost as 小計 from OrderDetail ";
+            + "order_qty  as 訂購數量,order_shipqty as 出貨數量,order_totalcost as 小計 from OrderDetail where order_no=@orderno";
             SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
 
             SqlDataReader reader = cmd.ExecuteReader();
             if (reader.HasRows)
@@ -634,15 +642,20 @@ namespace WindowsFormsApplication9
 
         private void datagridview_cellcheck(object sender, DataGridViewCellEventArgs e)
         {
+            
             string strQueryID = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+            string strSQL = "";
 
             SqlConnection con = new SqlConnection(scsb.ToString());
             con.Open();
-            string strSQL = "select*from OrderMaster where order_no=@QUERYID";
+            if (e.RowIndex == -1) { strSQL = "select*from OrderMaster where order_no=1"; }
+            else { strSQL = "select*from OrderMaster where order_no=@QUERYID"; }
+            
             SqlCommand cmd = new SqlCommand(strSQL, con);
 
             cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
             SqlDataReader reader = cmd.ExecuteReader();
+            
             if (reader.Read())
             {
                 tborder_no.Text = String.Format("{0}", reader["order_no"]);
@@ -721,7 +734,7 @@ namespace WindowsFormsApplication9
             dtporderdata.Value = DateTime.Now;
             cboxpaymethod.Text = "";
             cboxorder_status.Text = "";
-            tbreceiver.Text = "";
+            tbreceiver.Text = "到店購買顧客";
             tbreceiveraddress.Text = "";
             tbreceiverphone.Text = "";
             tbreceiverpost.Text = "";
@@ -791,6 +804,7 @@ namespace WindowsFormsApplication9
 
             cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
             SqlDataReader reader = cmd.ExecuteReader();
+            
             if (reader.Read())
             {
                 tbDPp_no.Text = String.Format("{0}", reader["product_no"]);
@@ -933,6 +947,11 @@ namespace WindowsFormsApplication9
 
 
             }
+        }
+
+        private void tborder_no_TextChanged(object sender, EventArgs e)
+        {
+            showDataGridView5();
         }
     }
 }
