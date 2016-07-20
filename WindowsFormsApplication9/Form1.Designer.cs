@@ -45,8 +45,8 @@
             this.btnDP修改 = new System.Windows.Forms.Button();
             this.btnDP新增 = new System.Windows.Forms.Button();
             this.cboxDPpname = new System.Windows.Forms.ComboBox();
-            this.productBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.project1DataSet = new WindowsFormsApplication9.Project1DataSet();
+            this.productBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.project1DataSet1 = new WindowsFormsApplication9.Project1DataSet1();
             this.tbDPshipqty = new System.Windows.Forms.TextBox();
             this.tbDPorderqty = new System.Windows.Forms.TextBox();
             this.tbDPp_no = new System.Windows.Forms.TextBox();
@@ -131,8 +131,8 @@
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.btnO查詢 = new System.Windows.Forms.Button();
-            this.productBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.project1DataSet1 = new WindowsFormsApplication9.Project1DataSet1();
+            this.productBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.project1DataSet = new WindowsFormsApplication9.Project1DataSet();
             this.productTableAdapter = new WindowsFormsApplication9.Project1DataSetTableAdapters.ProductTableAdapter();
             this.productTableAdapter1 = new WindowsFormsApplication9.Project1DataSet1TableAdapters.ProductTableAdapter();
             this.tabControl1.SuspendLayout();
@@ -141,8 +141,8 @@
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabPage6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -154,8 +154,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -359,15 +359,15 @@
             this.cboxDPpname.TabIndex = 66;
             this.cboxDPpname.SelectedIndexChanged += new System.EventHandler(this.datail_selectchange);
             // 
-            // productBindingSource
+            // productBindingSource1
             // 
-            this.productBindingSource.DataMember = "Product";
-            this.productBindingSource.DataSource = this.project1DataSet;
+            this.productBindingSource1.DataMember = "Product";
+            this.productBindingSource1.DataSource = this.project1DataSet1;
             // 
-            // project1DataSet
+            // project1DataSet1
             // 
-            this.project1DataSet.DataSetName = "Project1DataSet";
-            this.project1DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            this.project1DataSet1.DataSetName = "Project1DataSet1";
+            this.project1DataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // tbDPshipqty
             // 
@@ -375,6 +375,7 @@
             this.tbDPshipqty.Name = "tbDPshipqty";
             this.tbDPshipqty.Size = new System.Drawing.Size(100, 35);
             this.tbDPshipqty.TabIndex = 65;
+            this.tbDPshipqty.TextChanged += new System.EventHandler(this.shipqty_textchange);
             // 
             // tbDPorderqty
             // 
@@ -382,6 +383,7 @@
             this.tbDPorderqty.Name = "tbDPorderqty";
             this.tbDPorderqty.Size = new System.Drawing.Size(100, 35);
             this.tbDPorderqty.TabIndex = 64;
+            this.tbDPorderqty.TextChanged += new System.EventHandler(this.orderqty_textchange);
             // 
             // tbDPp_no
             // 
@@ -766,6 +768,7 @@
             this.tbfreight.Name = "tbfreight";
             this.tbfreight.Size = new System.Drawing.Size(100, 35);
             this.tbfreight.TabIndex = 6;
+            this.tbfreight.TextChanged += new System.EventHandler(this.freight_textchange);
             // 
             // tborder_no
             // 
@@ -1127,6 +1130,7 @@
             this.tbproductprice.Name = "tbproductprice";
             this.tbproductprice.Size = new System.Drawing.Size(100, 35);
             this.tbproductprice.TabIndex = 52;
+            this.tbproductprice.TextChanged += new System.EventHandler(this.price_textchange);
             // 
             // tbproductcost
             // 
@@ -1134,6 +1138,7 @@
             this.tbproductcost.Name = "tbproductcost";
             this.tbproductcost.Size = new System.Drawing.Size(100, 35);
             this.tbproductcost.TabIndex = 51;
+            this.tbproductcost.TextChanged += new System.EventHandler(this.cost_textchange);
             // 
             // tbproductname
             // 
@@ -1237,15 +1242,15 @@
             this.btnO查詢.Text = "查詢";
             this.btnO查詢.UseVisualStyleBackColor = false;
             // 
-            // productBindingSource1
+            // productBindingSource
             // 
-            this.productBindingSource1.DataMember = "Product";
-            this.productBindingSource1.DataSource = this.project1DataSet1;
+            this.productBindingSource.DataMember = "Product";
+            this.productBindingSource.DataSource = this.project1DataSet;
             // 
-            // project1DataSet1
+            // project1DataSet
             // 
-            this.project1DataSet1.DataSetName = "Project1DataSet1";
-            this.project1DataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            this.project1DataSet.DataSetName = "Project1DataSet";
+            this.project1DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // productTableAdapter
             // 
@@ -1273,8 +1278,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -1291,8 +1296,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).EndInit();
             this.ResumeLayout(false);
 
         }

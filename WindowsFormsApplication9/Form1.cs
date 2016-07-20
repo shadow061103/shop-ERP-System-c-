@@ -21,10 +21,10 @@ namespace WindowsFormsApplication9
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // TODO:  這行程式碼會將資料載入 'project1DataSet1.Product' 資料表。您可以視需要進行移動或移除。
-           // this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
-            // TODO:  這行程式碼會將資料載入 'project1DataSet.Product' 資料表。您可以視需要進行移動或移除。
-            this.productTableAdapter.Fill(this.project1DataSet.Product);
+          
+           //this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
+           
+            this.productTableAdapter.Fill(this.project1DataSet.Product);//家用
              scsb = new SqlConnectionStringBuilder();
            
             //scsb.DataSource = "CR1-16";
@@ -494,24 +494,30 @@ namespace WindowsFormsApplication9
         }
         private void showDataGridView5()
         {//訂單主檔
-           
-            
-            SqlConnection con = new SqlConnection(scsb.ToString());
-            con.Open();
-            string strSQL = "select order_no as 訂單編號,product_no as 產品編號,product_name as 產品名稱,unitprice as 單價,"
-            + "order_qty  as 訂購數量,order_shipqty as 出貨數量,order_totalcost as 小計 from OrderDetail where order_no=@orderno";
-            SqlCommand cmd = new SqlCommand(strSQL, con);
-            cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
 
-            SqlDataReader reader = cmd.ExecuteReader();
-            if (reader.HasRows)
+            try
             {
-                DataTable ds = new DataTable();
-                ds.Load(reader);
-                dataGridView5.DataSource = ds;
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "select order_no as 訂單編號,product_no as 產品編號,product_name as 產品名稱,unitprice as 單價,"
+                + "order_qty  as 訂購數量,order_shipqty as 出貨數量,order_totalcost as 小計 from OrderDetail where order_no=@orderno";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+                cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    DataTable ds = new DataTable();
+                    ds.Load(reader);
+                    dataGridView5.DataSource = ds;
+                }
+                //   else { dataGridView5.Enabled = false; }
+                reader.Close();
+                con.Close();
             }
-            reader.Close();
-            con.Close();
+            catch (Exception e) {
+                throw e;
+            }
 
         }
         private void showDataGridView1()
@@ -574,6 +580,26 @@ namespace WindowsFormsApplication9
             reader.Close();
             con.Close();
 
+        }
+        public void showtotal() {
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select sum(order_totalcost) as sum from OrderDetail"
+            + " where order_no=@orderno group by order_no ";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())//有讀到資料
+            {
+
+                tb總計.Text = String.Format("{0}", reader["sum"]);
+
+            }
+            else tb總計.Text = "0";
+            reader.Close();
+            con.Close();
+        
         }
         private void productgridview_cellclick(object sender, DataGridViewCellEventArgs e)
         {
@@ -810,11 +836,11 @@ namespace WindowsFormsApplication9
         {
             if (e.RowIndex != -1)
             {
-                string strQueryID = dataGridView5.Rows[e.RowIndex].Cells[0].Value.ToString();
+                string strQueryID = dataGridView5.Rows[e.RowIndex].Cells[1].Value.ToString();
 
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
-                string strSQL = "select*from OrderDetail where order_no=@QUERYID";
+                string strSQL = "select*from OrderDetail where product_no=@QUERYID";
                 SqlCommand cmd = new SqlCommand(strSQL, con);
 
                 cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
@@ -822,6 +848,7 @@ namespace WindowsFormsApplication9
 
                 if (reader.Read())
                 {
+                   // tborder_no.Text = String.Format("{0}", reader["order_no"]);
                     tbDPp_no.Text = String.Format("{0}", reader["product_no"]);
                     tbDPpname.Text = String.Format("{0}", reader["product_name"]);
                     tbDPprice.Text = String.Format("{0}", reader["unitprice"]);
@@ -877,7 +904,8 @@ namespace WindowsFormsApplication9
 
         private void btnDP新增_Click(object sender, EventArgs e)
         {
-            if ((tbDPp_no.Text.Length > 0) && (tborder_no.Text.Length > 0) && (tbDPorderqty.Text.Length > 0) && (tbDPshipqty.Text.Length > 0))
+            try
+            {   if ((tbDPp_no.Text.Length > 0) && (tborder_no.Text.Length > 0) && (tbDPorderqty.Text.Length > 0) && (tbDPshipqty.Text.Length > 0))
             {
                 double total = 0;
                 double price = Convert.ToDouble(tbDPprice.Text);
@@ -902,6 +930,7 @@ namespace WindowsFormsApplication9
                 con.Close();
                 MessageBox.Show(String.Format("資料更新完畢,共影響{0}筆資料", rows));
                 showDataGridView5();
+                showtotal();
             }
             else
             {
@@ -909,6 +938,8 @@ namespace WindowsFormsApplication9
 
 
             }
+            }
+            catch { MessageBox.Show("請重新選擇產品","重複輸入",MessageBoxButtons.OK,MessageBoxIcon.Error); }
 
         }
 
@@ -921,6 +952,7 @@ namespace WindowsFormsApplication9
             cmd.Parameters.AddWithValue("@OldName", tbDPpname.Text);
 
             int rows = cmd.ExecuteNonQuery();
+            showtotal();
             con.Close();
             MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
 
@@ -949,8 +981,8 @@ namespace WindowsFormsApplication9
                   +",order_totalcost=@Newctotalcost where product_no=@Searchproductno";
 
                 SqlCommand cmd = new SqlCommand(strSQL, con);
-                cmd.Parameters.AddWithValue(@"Neworderqty", tbDPorderqty.Text);
-                cmd.Parameters.AddWithValue(@"Newordershipqty", tbDPshipqty.Text);
+                cmd.Parameters.AddWithValue(@"orderqty", tbDPorderqty.Text);
+                cmd.Parameters.AddWithValue(@"ordershipqty", tbDPshipqty.Text);
                 cmd.Parameters.AddWithValue(@"Searchproductno",tbDPp_no.Text );
                 cmd.Parameters.AddWithValue(@"Newctotalcost", total);
 
@@ -958,6 +990,7 @@ namespace WindowsFormsApplication9
                 con.Close();
                 MessageBox.Show(String.Format("資料更新完畢,共影響{0}筆資料", rows));
                 showDataGridView5();
+                showtotal();
             }
             else
             {
@@ -969,29 +1002,128 @@ namespace WindowsFormsApplication9
 
         private void tborder_no_TextChanged(object sender, EventArgs e)
         {
-            showDataGridView5();//明細表資料
-
-                SqlConnection con = new SqlConnection(scsb.ToString());
-                con.Open();
-                string strSQL = "select sum(order_totalcost) as sum from OrderDetail"
-                +" where order_no=@orderno group by order_no ";
-                SqlCommand cmd = new SqlCommand(strSQL, con);
-                cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
-
-               SqlDataReader reader = cmd.ExecuteReader();
-               if (reader.Read())//有讀到資料
-               {
-
-               tb總計.Text = String.Format("{0}", reader["sum"]);
-                   
-                }
-               else tb總計.Text = "0";
-                reader.Close();
-                con.Close();
-
            
+            int a;
+            if (tborder_no.Text.Length > 0)
+            {
+                bool ifNum = Int32.TryParse(tborder_no.Text, out a);
+                if (ifNum && a > 0)
+                {
+                    //正確輸入
+                    showDataGridView5();//明細表資料
+                    showtotal();
+                }
+                else
+                {
+                    //錯誤輸入
+                    MessageBox.Show("號碼輸入錯誤!!", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    tborder_no.Text = "";
 
+                }
+            }
+       }
 
+        private void freight_textchange(object sender, EventArgs e)
+        {
+              int a;
+              if (tbfreight.Text.Length > 0)
+              {
+                  bool ifNum = Int32.TryParse(tbfreight.Text, out a);
+                  if (ifNum && a > 0)
+                  {
+                      //正確輸入
+
+                  }
+                  else
+                  {
+                      //錯誤輸入
+                      MessageBox.Show("號碼輸入錯誤!!", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                      tbfreight.Text = "";
+                  }
+              }
         }
+
+        private void orderqty_textchange(object sender, EventArgs e)
+        {
+            int a;
+            if (tbDPorderqty.Text.Length > 0)
+            {
+                bool ifNum = Int32.TryParse(tbDPorderqty.Text, out a);
+                if (ifNum && a > 0)
+                {
+                    //正確輸入
+
+                }
+                else
+                {
+                    //錯誤輸入
+                    MessageBox.Show("號碼輸入錯誤!!", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    tbDPorderqty.Text = "";
+                }
+            }
+        }
+
+        private void shipqty_textchange(object sender, EventArgs e)
+        {
+            int a;
+            if (tbDPshipqty.Text.Length > 0)
+            {
+                bool ifNum = Int32.TryParse(tbDPshipqty.Text, out a);
+                if (ifNum && a > 0)
+                {
+                    //正確輸入
+
+                }
+                else
+                {
+                    //錯誤輸入
+                    MessageBox.Show("號碼輸入錯誤!!", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    tbDPshipqty.Text = "";
+                }
+            }
+        }
+
+        private void cost_textchange(object sender, EventArgs e)
+        {
+            int a;
+            if (tbproductcost.Text.Length > 0)
+            {
+                bool ifNum = Int32.TryParse(tbproductcost.Text, out a);
+                if (ifNum && a > 0)
+                {
+                    //正確輸入
+
+                }
+                else
+                {
+                    //錯誤輸入
+                    MessageBox.Show("號碼輸入錯誤!!", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    tbproductcost.Text = "";
+                }
+            }
+        }
+
+        private void price_textchange(object sender, EventArgs e)
+        {
+            int a;
+            if (tbproductprice.Text.Length > 0)
+            {
+                bool ifNum = Int32.TryParse(tbproductprice.Text, out a);
+                if (ifNum && a > 0)
+                {
+                    //正確輸入
+
+                }
+                else
+                {
+                    //錯誤輸入
+                    MessageBox.Show("號碼輸入錯誤!!", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    tbproductprice.Text = "";
+                }
+            }
+        }
+
+       
+
     }
 }
