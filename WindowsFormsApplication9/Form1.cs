@@ -27,7 +27,7 @@ namespace WindowsFormsApplication9
             this.productTableAdapter.Fill(this.project1DataSet.Product);//家用
              scsb = new SqlConnectionStringBuilder();
            
-            //scsb.DataSource = "CR1-16";
+           // scsb.DataSource = "CR1-16";
             scsb.DataSource = "KUANFU-PC\\SQLEXPRESS";
             scsb.InitialCatalog = "Project1";
             scsb.IntegratedSecurity = true;
@@ -35,7 +35,7 @@ namespace WindowsFormsApplication9
             showDataGridView2();//產品資料表
             showDataGridView4();//客戶資料
             showDataGridView1();//訂單主檔
-            showDataGridView5();//訂單明細
+           // showDataGridView5();//訂單明細
         }
 
         private void btnO第一筆_Click(object sender, EventArgs e)
@@ -105,6 +105,7 @@ namespace WindowsFormsApplication9
         {
             if ((cboxAR.Text.Length > 0) && (cboxorder_status.Text.Length > 0) && (cboxpaymethod.Text.Length > 0))
             {
+                double freight = Convert.ToDouble(tbfreight.Text);
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
                 string strSQL = "update OrderMaster set order_date=@Neworderdata,"
@@ -125,7 +126,7 @@ namespace WindowsFormsApplication9
                 cmd.Parameters.AddWithValue(@"Newpost", tbreceiverpost.Text);
                 cmd.Parameters.AddWithValue(@"NewAddress", tbreceiveraddress.Text);
                 cmd.Parameters.AddWithValue(@"NewEmail", tbreceiveremail.Text);
-                cmd.Parameters.AddWithValue(@"Newfreight", tbfreight.Text);
+                cmd.Parameters.AddWithValue(@"Newfreight", freight);
                 cmd.Parameters.AddWithValue(@"Newpaymethod", cboxpaymethod.Text);
                 cmd.Parameters.AddWithValue(@"NewAr", cboxAR.Text);
                 cmd.Parameters.AddWithValue(@"Neworder_status", cboxorder_status.Text);
@@ -147,32 +148,43 @@ namespace WindowsFormsApplication9
 
         private void btnO刪除_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(scsb.ToString());
-            con.Open();
-            string strSQL = "delete from OrderMaster where order_no=@orderno";
-            SqlCommand cmd = new SqlCommand(strSQL, con);
-            cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
 
-            int rows = cmd.ExecuteNonQuery();
-            con.Close();
-            MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
+            DialogResult R;
+            R = MessageBox.Show("您確認要刪除資料?", "確認刪除", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (R == DialogResult.Yes)
+            {
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                 con.Open();
+                 string strSQL = "delete from OrderMaster where order_no=@orderno";
+                 SqlCommand cmd = new SqlCommand(strSQL, con);
+                 cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
+
+                 int rows = cmd.ExecuteNonQuery();
+                 con.Close();
+                 MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
 
 
-            tborder_no.Text = "";
-            tbfreight.Text = "";
-            dtporderdata.Value = DateTime.Now;
-            cboxpaymethod.Text = "";
-            cboxorder_status.Text = "";
-            tbreceiver.Text = "";
-            tbreceiveraddress.Text = "";
-            tbreceiverphone.Text = "";
-            tbreceiverpost.Text = "";
-            tbreceiveremail.Text = "";
-            cboxAR.Text = "";
-            cboxshipcheckstatus.Text = "";
-            dtpshipdate.Value = DateTime.Now;
-            dtpclosedate.Value = DateTime.Now;
-            showDataGridView1();
+                 tborder_no.Text = "";
+                 tbfreight.Text = "";
+                 dtporderdata.Value = DateTime.Now;
+                 cboxpaymethod.Text = "";
+                 cboxorder_status.Text = "";
+                 tbreceiver.Text = "";
+                 tbreceiveraddress.Text = "";
+                 tbreceiverphone.Text = "";
+                 tbreceiverpost.Text = "";
+                 tbreceiveremail.Text = "";
+                 cboxAR.Text = "";
+                 cboxshipcheckstatus.Text = "";
+                 dtpshipdate.Value = DateTime.Now;
+                 dtpclosedate.Value = DateTime.Now;
+                 showDataGridView1();
+            }
+            else
+            {
+                MessageBox.Show("取消刪除");
+            }
            
         }
 
@@ -244,21 +256,31 @@ namespace WindowsFormsApplication9
 
         private void btnC刪除_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(scsb.ToString());
-            con.Open();
-            string strSQL = "delete from customer where customer_phone=@Oldphone";
-            SqlCommand cmd = new SqlCommand(strSQL, con);
-            cmd.Parameters.AddWithValue("@Oldphone", tbcustomerphone.Text);
+             DialogResult R;
+            R = MessageBox.Show("您確認要刪除資料?", "確認刪除", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            int rows = cmd.ExecuteNonQuery();
-            con.Close();
-            MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
-            tbcustomer.Text = "";
-            tbcustomeraddress.Text = "";
-            tbcustomeremail.Text = "";
-            tbcustomerphone.Text = "";
-            tbcustomerpost.Text = "";
-            showDataGridView4();
+            if (R == DialogResult.Yes)
+            {
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "delete from customer where customer_phone=@Oldphone";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+                cmd.Parameters.AddWithValue("@Oldphone", tbcustomerphone.Text);
+
+                int rows = cmd.ExecuteNonQuery();
+                con.Close();
+                MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
+                tbcustomer.Text = "";
+                tbcustomeraddress.Text = "";
+                tbcustomeremail.Text = "";
+                tbcustomerphone.Text = "";
+                tbcustomerpost.Text = "";
+                showDataGridView4();
+            }
+            else
+            {
+                MessageBox.Show("取消刪除");
+            }
         }
 
         private void btnC查詢_Click(object sender, EventArgs e)
@@ -339,6 +361,9 @@ namespace WindowsFormsApplication9
         {
             if (tbproductname.Text.Length > 0)
             {
+                double productcost = Convert.ToDouble(tbproductcost.Text);
+                double productprice = Convert.ToDouble(tbproductprice.Text);
+
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
                 string strSQL = "update Product set  product_spec=@Newproductspec,"
@@ -348,8 +373,8 @@ namespace WindowsFormsApplication9
                 SqlCommand cmd = new SqlCommand(strSQL, con);
                 cmd.Parameters.AddWithValue(@"Searchname", tbproductname.Text);
                 cmd.Parameters.AddWithValue(@"Newproductspec", tbproductspec.Text);
-                cmd.Parameters.AddWithValue(@"Newproductcost", tbproductcost.Text);
-                cmd.Parameters.AddWithValue(@"Newproductprice", tbproductprice.Text);
+                cmd.Parameters.AddWithValue(@"productcost", productcost);
+                cmd.Parameters.AddWithValue(@"productprice", productprice);
                
                 int rows = cmd.ExecuteNonQuery();//執行但不查詢  會回傳整數值(異動幾筆資料)
                 con.Close();
@@ -366,25 +391,35 @@ namespace WindowsFormsApplication9
 
         private void btnP刪除_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(scsb.ToString());
-            con.Open();
-            string strSQL = "delete from Product where product_name=@OldName";
-            SqlCommand cmd = new SqlCommand(strSQL, con);
-            cmd.Parameters.AddWithValue("@OldName", tbproductname.Text);
+             DialogResult R;
+            R = MessageBox.Show("您確認要刪除資料?", "確認刪除", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            int rows = cmd.ExecuteNonQuery();
-            con.Close();
-            MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
+            if (R == DialogResult.Yes)
+            {
 
-            tbproductname.Text = "";
-            tbproductspec.Text = "";
-            tbproductcost.Text = "";
-            tbproductprice.Text = "";
-            showDataGridView2();
-            /*將產品編號重置但要全部刪除資料
-            string strSQL2 = "DBCC CHECKIDENT ('Product', RESEED, 0)";
-            SqlCommand cmd2 = new SqlCommand(strSQL2, con);*/
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                 con.Open();
+                 string strSQL = "delete from Product where product_name=@OldName";
+                 SqlCommand cmd = new SqlCommand(strSQL, con);
+                 cmd.Parameters.AddWithValue("@OldName", tbproductname.Text);
 
+                 int rows = cmd.ExecuteNonQuery();
+                 con.Close();
+                 MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
+
+                 tbproductname.Text = "";
+                 tbproductspec.Text = "";
+                 tbproductcost.Text = "";
+                 tbproductprice.Text = "";
+                 showDataGridView2();
+                 /*將產品編號重置但要全部刪除資料
+                 string strSQL2 = "DBCC CHECKIDENT ('Product', RESEED, 0)";
+                 SqlCommand cmd2 = new SqlCommand(strSQL2, con);*/
+            }
+            else
+            {
+                MessageBox.Show("取消刪除");
+            }
 
 
         }
@@ -493,10 +528,10 @@ namespace WindowsFormsApplication9
 
         }
         private void showDataGridView5()
-        {//訂單主檔
+        {
 
-            try
-            {
+            
+            
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
                 string strSQL = "select order_no as 訂單編號,product_no as 產品編號,product_name as 產品名稱,unitprice as 單價,"
@@ -507,17 +542,23 @@ namespace WindowsFormsApplication9
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (reader.HasRows)
                 {
+
                     DataTable ds = new DataTable();
                     ds.Load(reader);
                     dataGridView5.DataSource = ds;
+                    lblnodetail.Visible = false;
                 }
-                //   else { dataGridView5.Enabled = false; }
+                else
+                {
+                    lblnodetail.Visible = true;
+                    dataGridView5.Visible = false; 
+                    }
+               
                 reader.Close();
                 con.Close();
-            }
-            catch (Exception e) {
-                throw e;
-            }
+            
+           
+            
 
         }
         private void showDataGridView1()
@@ -907,6 +948,7 @@ namespace WindowsFormsApplication9
             try
             {   if ((tbDPp_no.Text.Length > 0) && (tborder_no.Text.Length > 0) && (tbDPorderqty.Text.Length > 0) && (tbDPshipqty.Text.Length > 0))
             {
+                dataGridView5.Visible = true;
                 double total = 0;
                 double price = Convert.ToDouble(tbDPprice.Text);
                 double qty = Convert.ToDouble(tbDPshipqty.Text);
@@ -945,24 +987,34 @@ namespace WindowsFormsApplication9
 
         private void btnDP刪除_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(scsb.ToString());
-            con.Open();
-            string strSQL = "delete from OrderDetail where product_name=@OldName";
-            SqlCommand cmd = new SqlCommand(strSQL, con);
-            cmd.Parameters.AddWithValue("@OldName", tbDPpname.Text);
+              DialogResult R;
+            R = MessageBox.Show("您確認要刪除資料?", "確認刪除", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            int rows = cmd.ExecuteNonQuery();
-            showtotal();
-            con.Close();
-            MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
+            if (R == DialogResult.Yes)
+            {
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                 con.Open();
+                 string strSQL = "delete from OrderDetail where product_name=@OldName";
+                 SqlCommand cmd = new SqlCommand(strSQL, con);
+                 cmd.Parameters.AddWithValue("@OldName", tbDPpname.Text);
 
-           tborder_no.Text="";
-           tbDPp_no.Text="";
-           tbDPpname.Text="";
-           tbDPprice.Text="";
-           tbDPorderqty.Text="";
-           tbDPshipqty.Text = "";
-           showDataGridView5();
+                 int rows = cmd.ExecuteNonQuery();
+                 showtotal();
+                 con.Close();
+                 MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
+
+                tborder_no.Text="";
+                tbDPp_no.Text="";
+                tbDPpname.Text="";
+                tbDPprice.Text="";
+                tbDPorderqty.Text="";
+                tbDPshipqty.Text = "";
+                showDataGridView5();
+            }
+            else
+            {
+                MessageBox.Show("取消刪除");
+            }
 
         }
 
@@ -973,6 +1025,7 @@ namespace WindowsFormsApplication9
                 double total = 0;
                 double price = Convert.ToDouble(tbDPprice.Text);
                 double qty = Convert.ToDouble(tbDPshipqty.Text);
+                double orderqty = Convert.ToDouble(tbDPorderqty.Text);
                 total = price * qty;
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
@@ -981,8 +1034,8 @@ namespace WindowsFormsApplication9
                   +",order_totalcost=@Newctotalcost where product_no=@Searchproductno";
 
                 SqlCommand cmd = new SqlCommand(strSQL, con);
-                cmd.Parameters.AddWithValue(@"orderqty", tbDPorderqty.Text);
-                cmd.Parameters.AddWithValue(@"ordershipqty", tbDPshipqty.Text);
+                cmd.Parameters.AddWithValue(@"orderqty", orderqty);
+                cmd.Parameters.AddWithValue(@"ordershipqty", qty);
                 cmd.Parameters.AddWithValue(@"Searchproductno",tbDPp_no.Text );
                 cmd.Parameters.AddWithValue(@"Newctotalcost", total);
 
@@ -1003,13 +1056,16 @@ namespace WindowsFormsApplication9
         private void tborder_no_TextChanged(object sender, EventArgs e)
         {
            
-            int a;
+            Double a;
             if (tborder_no.Text.Length > 0)
             {
-                bool ifNum = Int32.TryParse(tborder_no.Text, out a);
+                bool ifNum = Double.TryParse(tborder_no.Text, out a);
+             
                 if (ifNum && a > 0)
                 {
                     //正確輸入
+                    lblnodetail.Visible = false;
+                    dataGridView5.Visible = true;
                     showDataGridView5();//明細表資料
                     showtotal();
                 }
@@ -1025,11 +1081,11 @@ namespace WindowsFormsApplication9
 
         private void freight_textchange(object sender, EventArgs e)
         {
-              int a;
+            Double a;
               if (tbfreight.Text.Length > 0)
               {
-                  bool ifNum = Int32.TryParse(tbfreight.Text, out a);
-                  if (ifNum && a > 0)
+                  bool ifNum = Double.TryParse(tbfreight.Text, out a);
+                  if (ifNum && a >= 0)
                   {
                       //正確輸入
 
@@ -1045,11 +1101,11 @@ namespace WindowsFormsApplication9
 
         private void orderqty_textchange(object sender, EventArgs e)
         {
-            int a;
+            Double a;
             if (tbDPorderqty.Text.Length > 0)
             {
-                bool ifNum = Int32.TryParse(tbDPorderqty.Text, out a);
-                if (ifNum && a > 0)
+                bool ifNum = Double.TryParse(tbDPorderqty.Text, out a);
+                if (ifNum && a >= 0)
                 {
                     //正確輸入
 
@@ -1065,11 +1121,11 @@ namespace WindowsFormsApplication9
 
         private void shipqty_textchange(object sender, EventArgs e)
         {
-            int a;
+            Double a;
             if (tbDPshipqty.Text.Length > 0)
             {
-                bool ifNum = Int32.TryParse(tbDPshipqty.Text, out a);
-                if (ifNum && a > 0)
+                bool ifNum = Double.TryParse(tbDPshipqty.Text, out a);
+                if (ifNum && a >= 0)
                 {
                     //正確輸入
 
@@ -1085,11 +1141,11 @@ namespace WindowsFormsApplication9
 
         private void cost_textchange(object sender, EventArgs e)
         {
-            int a;
+            Double a;
             if (tbproductcost.Text.Length > 0)
             {
-                bool ifNum = Int32.TryParse(tbproductcost.Text, out a);
-                if (ifNum && a > 0)
+                bool ifNum = Double.TryParse(tbproductcost.Text, out a);
+                if (ifNum && a >= 0)
                 {
                     //正確輸入
 
@@ -1105,22 +1161,7 @@ namespace WindowsFormsApplication9
 
         private void price_textchange(object sender, EventArgs e)
         {
-            int a;
-            if (tbproductprice.Text.Length > 0)
-            {
-                bool ifNum = Int32.TryParse(tbproductprice.Text, out a);
-                if (ifNum && a > 0)
-                {
-                    //正確輸入
 
-                }
-                else
-                {
-                    //錯誤輸入
-                    MessageBox.Show("號碼輸入錯誤!!", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    tbproductprice.Text = "";
-                }
-            }
         }
 
        

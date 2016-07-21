@@ -37,6 +37,7 @@
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.lblnodetail = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.tbDPprice = new System.Windows.Forms.TextBox();
             this.tbDPpname = new System.Windows.Forms.TextBox();
@@ -71,7 +72,6 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.dataGridView6 = new System.Windows.Forms.DataGridView();
             this.tbreceiveremail = new System.Windows.Forms.TextBox();
             this.tbreceiveraddress = new System.Windows.Forms.TextBox();
             this.tbreceiverpost = new System.Windows.Forms.TextBox();
@@ -128,6 +128,8 @@
             this.label23 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label32 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.btnO查詢 = new System.Windows.Forms.Button();
@@ -146,7 +148,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).BeginInit();
@@ -244,6 +245,7 @@
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToResizeColumns = false;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(3, 6);
             this.dataGridView1.Name = "dataGridView1";
@@ -255,6 +257,7 @@
             // tabPage6
             // 
             this.tabPage6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.tabPage6.Controls.Add(this.lblnodetail);
             this.tabPage6.Controls.Add(this.label31);
             this.tabPage6.Controls.Add(this.tbDPprice);
             this.tabPage6.Controls.Add(this.tbDPpname);
@@ -277,6 +280,18 @@
             this.tabPage6.Size = new System.Drawing.Size(1221, 215);
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "訂單明細";
+            // 
+            // lblnodetail
+            // 
+            this.lblnodetail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.lblnodetail.Font = new System.Drawing.Font("微軟正黑體", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.lblnodetail.ForeColor = System.Drawing.Color.Red;
+            this.lblnodetail.Location = new System.Drawing.Point(13, 9);
+            this.lblnodetail.Name = "lblnodetail";
+            this.lblnodetail.Size = new System.Drawing.Size(631, 192);
+            this.lblnodetail.TabIndex = 73;
+            this.lblnodetail.Text = "訂單尚無明細資料，請選擇產品並點選新增建立明細";
+            this.lblnodetail.Visible = false;
             // 
             // label31
             // 
@@ -433,6 +448,7 @@
             // 
             this.dataGridView5.AllowUserToAddRows = false;
             this.dataGridView5.AllowUserToDeleteRows = false;
+            this.dataGridView5.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.dataGridView5.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView5.Location = new System.Drawing.Point(3, 3);
             this.dataGridView5.Name = "dataGridView5";
@@ -599,7 +615,6 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.dataGridView6);
             this.groupBox2.Controls.Add(this.tbreceiveremail);
             this.groupBox2.Controls.Add(this.tbreceiveraddress);
             this.groupBox2.Controls.Add(this.tbreceiverpost);
@@ -616,15 +631,6 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "收貨人資訊";
-            // 
-            // dataGridView6
-            // 
-            this.dataGridView6.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView6.Location = new System.Drawing.Point(431, 264);
-            this.dataGridView6.Name = "dataGridView6";
-            this.dataGridView6.RowTemplate.Height = 24;
-            this.dataGridView6.Size = new System.Drawing.Size(240, 150);
-            this.dataGridView6.TabIndex = 11;
             // 
             // tbreceiveremail
             // 
@@ -857,6 +863,7 @@
             this.dataGridView4.AllowUserToOrderColumns = true;
             this.dataGridView4.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dataGridView4.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridView4.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.dataGridView4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView4.Location = new System.Drawing.Point(23, 354);
             this.dataGridView4.Name = "dataGridView4";
@@ -1039,6 +1046,7 @@
             this.dataGridView2.AllowUserToResizeRows = false;
             this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView2.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
+            this.dataGridView2.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.dataGridView2.Location = new System.Drawing.Point(401, 30);
@@ -1194,6 +1202,8 @@
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.tabPage4.Controls.Add(this.label32);
+            this.tabPage4.Controls.Add(this.textBox1);
             this.tabPage4.Controls.Add(this.dataGridView3);
             this.tabPage4.Controls.Add(this.comboBox1);
             this.tabPage4.Controls.Add(this.btnO查詢);
@@ -1204,28 +1214,50 @@
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "訂單查詢";
             // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(727, 38);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(54, 26);
+            this.label32.TabIndex = 63;
+            this.label32.Text = "年度";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(590, 29);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(122, 35);
+            this.textBox1.TabIndex = 62;
+            // 
             // dataGridView3
             // 
             this.dataGridView3.AllowUserToAddRows = false;
             this.dataGridView3.AllowUserToDeleteRows = false;
             this.dataGridView3.AllowUserToOrderColumns = true;
+            this.dataGridView3.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView3.Location = new System.Drawing.Point(18, 91);
             this.dataGridView3.Name = "dataGridView3";
             this.dataGridView3.ReadOnly = true;
             this.dataGridView3.RowTemplate.Height = 24;
-            this.dataGridView3.Size = new System.Drawing.Size(832, 318);
+            this.dataGridView3.Size = new System.Drawing.Size(1237, 542);
             this.dataGridView3.TabIndex = 61;
             // 
             // comboBox1
             // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
-            "訂單依日期",
+            "歷史訂單",
+            "訂單尚無明細",
             "訂單未收款已出貨",
-            "訂單已出貨未收款",
-            "訂單未結案",
-            "營業額"});
+            "訂單已收款未出貨",
+            "所有未結案訂單",
+            "第一季營業額",
+            "第二季營業額",
+            "第三季營業額",
+            "第四季營業額"});
             this.comboBox1.Location = new System.Drawing.Point(227, 28);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(274, 34);
@@ -1285,7 +1317,6 @@
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
@@ -1295,6 +1326,7 @@
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).EndInit();
@@ -1388,7 +1420,6 @@
         private System.Windows.Forms.DataGridView dataGridView5;
         private System.Windows.Forms.Button btn查詢;
         private System.Windows.Forms.Button btn清空;
-        private System.Windows.Forms.DataGridView dataGridView6;
         private System.Windows.Forms.Button btnDP刪除;
         private System.Windows.Forms.Button btnDP修改;
         private System.Windows.Forms.Button btnDP新增;
@@ -1410,6 +1441,9 @@
         private Project1DataSet1 project1DataSet1;
         private System.Windows.Forms.BindingSource productBindingSource1;
         private Project1DataSet1TableAdapters.ProductTableAdapter productTableAdapter1;
+        private System.Windows.Forms.Label lblnodetail;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
