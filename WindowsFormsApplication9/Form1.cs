@@ -22,7 +22,7 @@ namespace WindowsFormsApplication9
         private void Form1_Load(object sender, EventArgs e)
         {
           
-           //this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
+         //  this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
            
             this.productTableAdapter.Fill(this.project1DataSet.Product);//家用
              scsb = new SqlConnectionStringBuilder();
@@ -36,6 +36,8 @@ namespace WindowsFormsApplication9
             showDataGridView4();//客戶資料
             showDataGridView1();//訂單主檔
            // showDataGridView5();//訂單明細
+          
+       
         }
 
         private void btnO第一筆_Click(object sender, EventArgs e)
@@ -1163,8 +1165,404 @@ namespace WindowsFormsApplication9
         {
 
         }
+        private void showDataGridView3_1()
+        {//歷史訂單查詢
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select*from historyorder";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
 
-       
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            reader.Close();
+            con.Close();
+
+        }
+        private void showDataGridView3_2()
+        {//訂單尚無明細
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select*from nodetail";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            reader.Close();
+            con.Close();
+
+        }
+        private void showDataGridView3_3()
+        {//訂單未收款已出貨
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = " select*from view3";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            reader.Close();
+            con.Close();
+
+        }
+        private void showDataGridView3_4()
+        {//訂單已收款未出貨
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = " select*from view4";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            else{MessageBox.Show("查無資料!");}
+            reader.Close();
+            con.Close();
+
+        }
+        private void showDataGridView3_5()
+        {//所有未結案訂單
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = " select*from view5";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            reader.Close();
+            con.Close();
+
+        }
+        private void showDataGridView3_6()
+        {//第一季營業額
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select '第一季' as 季數,sum(o.order_totalcost) as 營業額"
+              +" from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
+             + " where (month(m.order_date) between '1' and '3') and year(m.order_date)=(case @searchyear when '' then year(getdate()) when null then year(getdate()) else  @searchyear end  )";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            else { MessageBox.Show("查無資料!"); }
+            reader.Close();
+            con.Close();
+
+        }
+        private void showDataGridView3_7()
+        {//第二季營業額
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select '第二季' as 季數,sum(o.order_totalcost) as 營業額"
+              + " from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
+             + " where (month(m.order_date) between '4' and '6') and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end  )";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            else { MessageBox.Show("查無資料!"); }
+            reader.Close();
+            con.Close();
+
+        }
+
+        private void showDataGridView3_8()
+        {//第三季營業額
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select '第三季' as 季數,sum(o.order_totalcost) as 營業額"
+              + " from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
+             + " where (month(m.order_date) between '7' and '9') and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end )";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            else { MessageBox.Show("查無資料!"); }
+            reader.Close();
+            con.Close();
+
+        }
+        private void showDataGridView3_9()
+        {//第四季營業額
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select '第四季' as 季數,sum(o.order_totalcost) as 營業額"
+              + " from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
+             + " where (month(m.order_date) between '10' and '12') and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end  )";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            else { MessageBox.Show("查無資料!"); }
+            reader.Close();
+            con.Close();
+
+        }
+        private void showDataGridView3_10()
+        {//月份營業額
+            if (cboxmonth.SelectedIndex >= 0)
+            {
+                double month = cboxmonth.SelectedIndex + 1;
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                 con.Open();
+                 string strSQL = "select sum(o.order_totalcost) as 營業額 from OrderMaster m join OrderDetail o"
+                 + " on o.order_no=m.order_no where month(m.order_date)=@searchmonth and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end  )";
+                 SqlCommand cmd = new SqlCommand(strSQL, con);
+                 cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
+                 cmd.Parameters.AddWithValue(@"searchmonth", month);
+
+                 SqlDataReader reader = cmd.ExecuteReader();
+                 if (reader.HasRows)
+                 {
+                     DataTable ds = new DataTable();
+                     ds.Load(reader);
+                     dataGridView3.DataSource = ds;
+                 }
+                 else { MessageBox.Show("查無資料!"); }
+                 reader.Close();
+                 con.Close();
+            }
+            else { MessageBox.Show("請選擇月份"); }
+
+        }
+        private void showDataGridView3_11()
+        {//年度營業額
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select sum(o.order_totalcost) as 營業額 from OrderMaster m join OrderDetail o"
+              + " on o.order_no=m.order_no where year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end  )";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
+            
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            else { MessageBox.Show("查無資料!"); }
+
+
+            reader.Close();
+            con.Close();
+
+        }
+        private void showDataGridView3_12()
+        {//訂單已收款未出貨
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = " select month(m.order_date) 月份,o.product_name 產品名稱,sum(o.order_shipqty) 銷售量 from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
++ " where year(m.order_date)=(case @searchyear when '' then year(getdate()) when null then year(getdate()) else  @searchyear end  ) and (m.order_status ='3.已結案' or  (m.account_receive='1.已收款' and m.order_status ='1.正常出貨'))"
++" group by month(m.order_date),o.product_name order by 1";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            else { MessageBox.Show("查無資料!"); }
+            reader.Close();
+            con.Close();
+
+        }
+        private void showDataGridView3_13()
+        {//客戶訂單數
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select m.order_receiver 客戶名稱,count(*) 訂單數 from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
+         +" where m.order_receiver like @searchname group by m.order_receiver";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"searchname", "%"+tbsearchcus.Text+"%");
+
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                DataTable ds = new DataTable();
+                ds.Load(reader);
+                dataGridView3.DataSource = ds;
+            }
+            else { MessageBox.Show("查無此人!"); }
+
+
+            reader.Close();
+            con.Close();
+
+        }
+        private void Yeartextchange(object sender, EventArgs e)
+        {//檢查查詢年度的範圍
+            Double a;
+            if (tbOyear.Text.Length > 0)
+            {
+                bool ifNum = Double.TryParse(tbOyear.Text, out a);
+                if (ifNum && a >=0 && a<3000)
+                {
+                    //正確輸入
+
+                }
+                else
+                {
+                    //錯誤輸入
+                    MessageBox.Show("年分輸入錯誤!!", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    tbOyear.Text = "";
+                }
+            }
+        }
+
+        private void btnO查詢_Click_1(object sender, EventArgs e)
+        {
+            switch (cboxOsearch.SelectedIndex) 
+               { 
+                case 0:
+                       showDataGridView3_1();
+                       break;
+                case 1:
+                    showDataGridView3_2();
+                       break;
+                case 2:
+                    showDataGridView3_3();
+                       break;
+                case 3:
+                    showDataGridView3_4();
+                       break;
+                case 4:
+                    showDataGridView3_5();
+                       break;
+                case 5:
+                    showDataGridView3_6();
+                       break;
+                case 6:
+                       showDataGridView3_7();
+                       break;
+                case 7:
+                       showDataGridView3_8();
+                       break;
+                case 8:
+                       showDataGridView3_9();
+                       break;
+                case 9:
+                    showDataGridView3_10();
+                       break;
+                case 10:
+                     showDataGridView3_11();
+                       break;
+                case 11:
+                       showDataGridView3_12();
+                       break;
+                case 12:
+                       showDataGridView3_13();
+                       break;
+                default:
+                    break;
+                      }
+        }
+
+        private void cboxOsearch_indexchange(object sender, EventArgs e)
+        {
+            switch(cboxOsearch.SelectedIndex){
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                    label32.Visible = false;
+                    tbOyear.Visible = false;
+                    label33.Visible = false;
+                    cboxmonth.Visible = false;
+                      label34.Visible = false;
+                    tbsearchcus.Visible = false;
+                    break;
+                case 9:
+                    label32.Visible = true;
+                    tbOyear.Visible = true;
+                    label33.Visible = true;
+                    cboxmonth.Visible = true;
+                      label34.Visible = false;
+                    tbsearchcus.Visible = false;
+                    break;
+                case 10:
+                     label32.Visible = true;
+                    tbOyear.Visible = true;
+                    label33.Visible = false;
+                    cboxmonth.Visible = false;
+                      label34.Visible = false;
+                    tbsearchcus.Visible = false;
+                    break;
+                case 11:
+                    label32.Visible = true;
+                    tbOyear.Visible = true;
+                     label33.Visible = false;
+                    cboxmonth.Visible = false;
+                    label34.Visible = false;
+                    tbsearchcus.Visible = false;
+                    break;
+                case 12:
+                     label32.Visible = false;
+                    tbOyear.Visible = false;
+                    label33.Visible = false;
+                    cboxmonth.Visible = false;
+                    label34.Visible = true;
+                    tbsearchcus.Visible = true;
+                    break;
+                default:
+                    break;
+            
+            }
+        }
+
+
 
     }
 }
