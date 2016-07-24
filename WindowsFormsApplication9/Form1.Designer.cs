@@ -141,6 +141,7 @@
             this.productTableAdapter1 = new WindowsFormsApplication9.Project1DataSet1TableAdapters.ProductTableAdapter();
             this.label34 = new System.Windows.Forms.Label();
             this.tbsearchcus = new System.Windows.Forms.TextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -179,6 +180,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.tabPage1.Controls.Add(this.comboBox1);
             this.tabPage1.Controls.Add(this.btn查詢);
             this.tabPage1.Controls.Add(this.btn清空);
             this.tabPage1.Controls.Add(this.tabControl2);
@@ -745,7 +747,7 @@
             "1.正常出貨",
             "2.未出貨",
             "3.已結案",
-            "4.已刪除",
+            "4.已取消",
             "5.延遲出貨",
             "6.斷貨無法出",
             "7.出貨前取消訂單"});
@@ -1365,6 +1367,14 @@
             this.tbsearchcus.TabIndex = 66;
             this.tbsearchcus.Visible = false;
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(536, 6);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(176, 34);
+            this.comboBox1.TabIndex = 67;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1521,6 +1531,7 @@
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.TextBox tbsearchcus;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

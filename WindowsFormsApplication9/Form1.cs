@@ -71,7 +71,7 @@ namespace WindowsFormsApplication9
                 string strSQL = "insert into OrderMaster values (@Neworderdata,@Newshipdate,@shipcheckstatus,"
                 + "(case @Newreceiver when '' then '到店購買顧客' else @Newreceiver end),@Newphone,@Newpost,@NewAddress,@NewEmail,"
                +" (case @Newfreight when null then 0 when '' then 0 else @Newfreight end),"
-                +"@Newpaymethod,@NewAr ,@Neworder_status,@Newclosedate)";
+                +"@Newpaymethod,@NewAr ,@Neworder_status,@Newclosedate,'未結案')";
                 SqlCommand cmd = new SqlCommand(strSQL, con);
 
 
@@ -94,6 +94,8 @@ namespace WindowsFormsApplication9
                 con.Close();
                 MessageBox.Show(String.Format("資料更新完畢,共影響{0}筆資料", rows));
                 showDataGridView1();
+                showmaxorderno();
+                changefinalstatus();
             }
             else
             {
@@ -139,6 +141,7 @@ namespace WindowsFormsApplication9
                 con.Close();
                 MessageBox.Show(String.Format("資料更新完畢,共影響{0}筆資料", rows));
                 showDataGridView1();
+                changefinalstatus();
             }
             else
             {
@@ -158,7 +161,7 @@ namespace WindowsFormsApplication9
             {
                 SqlConnection con = new SqlConnection(scsb.ToString());
                  con.Open();
-                 string strSQL = "update OrderMaster set order_status='4.已刪除'  where order_no=@orderno";
+                 string strSQL = "update OrderMaster set finalstatus='已刪除'  where order_no=@orderno";
                  SqlCommand cmd = new SqlCommand(strSQL, con);
                  cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
 
@@ -569,7 +572,7 @@ namespace WindowsFormsApplication9
             con.Open();
             string strSQL = "select order_no as 訂單編號,order_date as 訂單日期,order_shipdate as 訂單出貨日,order_shipcheckstatus as 物流出貨確認狀態,order_receiver as 收貨人,order_phone as 收貨人手機,"
                        + "receiver_post as 收貨人郵遞區號,receiver_address as 收貨人地址,receiver_email as 收貨人email,freight_fee as 物流費用,pay_method as 付款方式,account_receive as 是否收款,order_status as 訂單結案狀態,"
-           + " order_closedate as 訂單結案日期 from OrderMaster where order_status !='3.已結案' and order_status !='4.已刪除' and  (account_receive !='1.已收款' and order_status !='1.正常出貨')";
+           + " order_closedate as 訂單結案日期 from OrderMaster where finalstatus !='已結案' and finalstatus !='已刪除' and  (account_receive !='1.已收款' and order_status !='1.正常出貨')";
             SqlCommand cmd = new SqlCommand(strSQL, con);
 
             SqlDataReader reader = cmd.ExecuteReader();
@@ -643,6 +646,45 @@ namespace WindowsFormsApplication9
             reader.Close();
             con.Close();
         
+        }
+        public void showmaxorderno()
+        {
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select max(order_no) as max from OrderMaster ";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+          
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())//有讀到資料
+            {
+
+                tborder_no.Text = String.Format("{0}", reader["max"]);
+
+            }
+            
+            reader.Close();
+            con.Close();
+
+        }
+        public void changefinalstatus()
+        {//已結案訂單
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "update OrderMaster set finalstatus='已結案'"
+         +"where account_receive ='1.已收款' and order_status ='1.正常出貨'";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())//有讀到資料
+            {
+                MessageBox.Show("訂單已結案!");
+           }
+
+            reader.Close();
+            con.Close();
+
         }
         private void productgridview_cellclick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1397,7 +1439,7 @@ namespace WindowsFormsApplication9
             SqlConnection con = new SqlConnection(scsb.ToString());
             con.Open();
             string strSQL = " select month(m.order_date) 月份,o.product_name 產品名稱,sum(o.order_shipqty) 銷售量 from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
-+ " where year(m.order_date)=(case @searchyear when '' then year(getdate()) when null then year(getdate()) else  @searchyear end  ) and (m.order_status ='3.已結案' or  (m.account_receive='1.已收款' and m.order_status ='1.正常出貨'))"
++ " where year(m.order_date)=(case @searchyear when '' then year(getdate()) when null then year(getdate()) else  @searchyear end  ) and (m.finalstatus ='已結案' or  (m.account_receive='1.已收款' and m.order_status ='1.正常出貨'))"
 +" group by month(m.order_date),o.product_name order by 1";
             SqlCommand cmd = new SqlCommand(strSQL, con);
             cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
@@ -1455,6 +1497,7 @@ namespace WindowsFormsApplication9
                 ds.Load(reader);
                 dataGridView3.DataSource = ds;
             }
+            else { MessageBox.Show("查無資料!"); }
             reader.Close();
             con.Close();
 
