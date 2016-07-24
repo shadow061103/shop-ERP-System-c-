@@ -745,9 +745,10 @@
             "1.正常出貨",
             "2.未出貨",
             "3.已結案",
-            "4.延遲出貨",
-            "5.斷貨無法出",
-            "6.出貨前取消訂單"});
+            "4.已刪除",
+            "5.延遲出貨",
+            "6.斷貨無法出",
+            "7.出貨前取消訂單"});
             this.cboxorder_status.Location = new System.Drawing.Point(150, 219);
             this.cboxorder_status.Name = "cboxorder_status";
             this.cboxorder_status.Size = new System.Drawing.Size(190, 34);
@@ -1308,7 +1309,8 @@
             "月份營業額",
             "年度營業額",
             "產品銷售量",
-            "客戶訂單數"});
+            "客戶訂單數",
+            "已刪除訂單"});
             this.cboxOsearch.Location = new System.Drawing.Point(227, 28);
             this.cboxOsearch.Name = "cboxOsearch";
             this.cboxOsearch.Size = new System.Drawing.Size(274, 34);

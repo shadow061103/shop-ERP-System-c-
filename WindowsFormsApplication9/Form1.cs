@@ -158,7 +158,7 @@ namespace WindowsFormsApplication9
             {
                 SqlConnection con = new SqlConnection(scsb.ToString());
                  con.Open();
-                 string strSQL = "delete from OrderMaster where order_no=@orderno";
+                 string strSQL = "update OrderMaster set order_status='4.已刪除'  where order_no=@orderno";
                  SqlCommand cmd = new SqlCommand(strSQL, con);
                  cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
 
@@ -568,8 +568,8 @@ namespace WindowsFormsApplication9
             SqlConnection con = new SqlConnection(scsb.ToString());
             con.Open();
             string strSQL = "select order_no as 訂單編號,order_date as 訂單日期,order_shipdate as 訂單出貨日,order_shipcheckstatus as 物流出貨確認狀態,order_receiver as 收貨人,order_phone as 收貨人手機,"
-                       +"receiver_post as 收貨人郵遞區號,receiver_address as 收貨人地址,receiver_email as 收貨人email,freight_fee as 物流費用,pay_method as 付款方式,account_receive as 是否收款,order_status as 訂單結案狀態,"
-           +" order_closedate as 訂單結案日期 from OrderMaster ";
+                       + "receiver_post as 收貨人郵遞區號,receiver_address as 收貨人地址,receiver_email as 收貨人email,freight_fee as 物流費用,pay_method as 付款方式,account_receive as 是否收款,order_status as 訂單結案狀態,"
+           + " order_closedate as 訂單結案日期 from OrderMaster where order_status !='3.已結案' and order_status !='4.已刪除' and  (account_receive !='1.已收款' and order_status !='1.正常出貨')";
             SqlCommand cmd = new SqlCommand(strSQL, con);
 
             SqlDataReader reader = cmd.ExecuteReader();
@@ -1393,7 +1393,7 @@ namespace WindowsFormsApplication9
 
         }
         private void showDataGridView3_12()
-        {//訂單已收款未出貨
+        {//產品銷量
             SqlConnection con = new SqlConnection(scsb.ToString());
             con.Open();
             string strSQL = " select month(m.order_date) 月份,o.product_name 產品名稱,sum(o.order_shipqty) 銷售量 from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
@@ -1415,13 +1415,38 @@ namespace WindowsFormsApplication9
         }
         private void showDataGridView3_13()
         {//客戶訂單數
+            if (tbsearchcus.Text.Length > 0)
+            {
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "select year(m.order_date) 年度,m.order_receiver 客戶名稱,count(*) 訂單數 from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
+             + " where m.order_receiver like @searchname group by year(m.order_date),m.order_receiver";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+                cmd.Parameters.AddWithValue(@"searchname", "%" + tbsearchcus.Text + "%");
+
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    DataTable ds = new DataTable();
+                    ds.Load(reader);
+                    dataGridView3.DataSource = ds;
+                }
+                else { MessageBox.Show("查無此人!"); }
+
+
+                reader.Close();
+                con.Close();
+            }
+            else { MessageBox.Show("請輸入客戶姓名!"); }
+
+        }
+        private void showDataGridView3_14()
+        {//查詢已刪除訂單
             SqlConnection con = new SqlConnection(scsb.ToString());
             con.Open();
-            string strSQL = "select m.order_receiver 客戶名稱,count(*) 訂單數 from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
-         +" where m.order_receiver like @searchname group by m.order_receiver";
+            string strSQL = "select * from view14";
             SqlCommand cmd = new SqlCommand(strSQL, con);
-            cmd.Parameters.AddWithValue(@"searchname", "%"+tbsearchcus.Text+"%");
-
 
             SqlDataReader reader = cmd.ExecuteReader();
             if (reader.HasRows)
@@ -1430,9 +1455,6 @@ namespace WindowsFormsApplication9
                 ds.Load(reader);
                 dataGridView3.DataSource = ds;
             }
-            else { MessageBox.Show("查無此人!"); }
-
-
             reader.Close();
             con.Close();
 
@@ -1499,6 +1521,9 @@ namespace WindowsFormsApplication9
                        break;
                 case 12:
                        showDataGridView3_13();
+                       break;
+                case 13:
+                       showDataGridView3_14();
                        break;
                 default:
                     break;
