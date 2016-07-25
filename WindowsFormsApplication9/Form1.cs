@@ -21,13 +21,17 @@ namespace WindowsFormsApplication9
 
         private void Form1_Load(object sender, EventArgs e)
         {
-          
-         //  this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
+  
+           // this.customerTableAdapter1.Fill(this.project1DataSet3.customer);//資策會
            
+            this.customerTableAdapter.Fill(this.project1DataSet2.customer);//家用
             this.productTableAdapter.Fill(this.project1DataSet.Product);//家用
+         // this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
+           
+           
              scsb = new SqlConnectionStringBuilder();
            
-           // scsb.DataSource = "CR1-16";
+            //scsb.DataSource = "CR1-16";
             scsb.DataSource = "KUANFU-PC\\SQLEXPRESS";
             scsb.InitialCatalog = "Project1";
             scsb.IntegratedSecurity = true;
@@ -36,6 +40,7 @@ namespace WindowsFormsApplication9
             showDataGridView4();//客戶資料
             showDataGridView1();//訂單主檔
            // showDataGridView5();//訂單明細
+            shownodetail();//顯示無明細的數量
           
        
         }
@@ -66,6 +71,7 @@ namespace WindowsFormsApplication9
            
             if ((cboxAR.Text.Length>0) && (cboxorder_status.Text.Length>0) &&(cboxpaymethod.Text.Length >0) )
             {
+                double freight = Convert.ToDouble(tbfreight.Text);
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
                 string strSQL = "insert into OrderMaster values (@Neworderdata,@Newshipdate,@shipcheckstatus,"
@@ -83,7 +89,7 @@ namespace WindowsFormsApplication9
                 cmd.Parameters.AddWithValue(@"Newpost", tbreceiverpost.Text);
                 cmd.Parameters.AddWithValue(@"NewAddress", tbreceiveraddress.Text);
                 cmd.Parameters.AddWithValue(@"NewEmail", tbreceiveremail.Text);
-                cmd.Parameters.AddWithValue(@"Newfreight",tbfreight.Text);
+                cmd.Parameters.AddWithValue(@"Newfreight", freight);
                 cmd.Parameters.AddWithValue(@"Newpaymethod", cboxpaymethod.Text);
                 cmd.Parameters.AddWithValue(@"NewAr", cboxAR.Text);
                 cmd.Parameters.AddWithValue(@"Neworder_status", cboxorder_status.Text);
@@ -140,7 +146,6 @@ namespace WindowsFormsApplication9
                 int rows = cmd.ExecuteNonQuery();//執行但不查詢  會回傳整數值(異動幾筆資料)
                 con.Close();
                 MessageBox.Show(String.Format("資料更新完畢,共影響{0}筆資料", rows));
-                showDataGridView1();
                 changefinalstatus();
             }
             else
@@ -149,6 +154,9 @@ namespace WindowsFormsApplication9
 
 
             }
+           
+            showDataGridView1();
+            
         }
 
         private void btnO刪除_Click(object sender, EventArgs e)
@@ -552,10 +560,15 @@ namespace WindowsFormsApplication9
                     ds.Load(reader);
                     dataGridView5.DataSource = ds;
                     lblnodetail.Visible = false;
+                    lblnode.Visible = false;
+                   
                 }
                 else
                 {
+                    lblnode.Visible =true;
                     lblnodetail.Visible = true;
+                   
+                  
                     dataGridView5.Visible = false; 
                     }
                
@@ -572,7 +585,8 @@ namespace WindowsFormsApplication9
             con.Open();
             string strSQL = "select order_no as 訂單編號,order_date as 訂單日期,order_shipdate as 訂單出貨日,order_shipcheckstatus as 物流出貨確認狀態,order_receiver as 收貨人,order_phone as 收貨人手機,"
                        + "receiver_post as 收貨人郵遞區號,receiver_address as 收貨人地址,receiver_email as 收貨人email,freight_fee as 物流費用,pay_method as 付款方式,account_receive as 是否收款,order_status as 訂單結案狀態,"
-           + " order_closedate as 訂單結案日期 from OrderMaster where finalstatus !='已結案' and finalstatus !='已刪除' and  (account_receive !='1.已收款' and order_status !='1.正常出貨')";
+           + " order_closedate as 訂單結案日期 from OrderMaster where finalstatus !='已結案' and finalstatus !='已刪除' ";
+            //備用and  (account_receive !='1.已收款' and order_status !='1.正常出貨')
             SqlCommand cmd = new SqlCommand(strSQL, con);
 
             SqlDataReader reader = cmd.ExecuteReader();
@@ -647,6 +661,26 @@ namespace WindowsFormsApplication9
             con.Close();
         
         }
+        public void shownodetail()
+        {
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select count(*) as num from nodetail";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            
+
+            SqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())//有讀到資料
+            {
+
+                tbnodatail.Text = String.Format("{0}", reader["num"]);
+
+            }
+            else tbnodatail.Text = "0";
+            reader.Close();
+            con.Close();
+
+        }
         public void showmaxorderno()
         {
             SqlConnection con = new SqlConnection(scsb.ToString());
@@ -672,7 +706,8 @@ namespace WindowsFormsApplication9
             SqlConnection con = new SqlConnection(scsb.ToString());
             con.Open();
             string strSQL = "update OrderMaster set finalstatus='已結案'"
-         +"where account_receive ='1.已收款' and order_status ='1.正常出貨'";
+         +"where account_receive ='1.已收款' and order_status ='1.正常出貨'"
+         + " and order_no in (select distinct order_no from OrderDetail)";
             SqlCommand cmd = new SqlCommand(strSQL, con);
 
 
@@ -869,53 +904,7 @@ namespace WindowsFormsApplication9
             dtpclosedate.Value = DateTime.Now;
             showDataGridView1();
         }
-
-        private void btnO加入常客資料_Click(object sender, EventArgs e)
-        {
-            if (tbreceiverphone.Text.Length>0)
-            {
-                SqlConnection con = new SqlConnection(scsb.ToString());
-                con.Open();
-                string strSQL = "select*from customer where customer_phone = @searchphone";
-                SqlCommand cmd = new SqlCommand(strSQL, con);
-                cmd.Parameters.AddWithValue(@"searchphone", tbreceiverphone.Text);
-
-
-                SqlDataReader reader = cmd.ExecuteReader();
-               
-                if (reader.Read())//有讀到資料
-                {
-                    tbreceiver.Text = String.Format("{0}", reader["customer_name"]);
-                    tbreceiverpost.Text = String.Format("{0}", reader["customer_post"]);
-                    tbreceiveraddress.Text = String.Format("{0}", reader["customer_address"]);
-                    tbreceiveremail.Text = String.Format("{0}", reader["customer_email"]);
-                    tbreceiverphone.Text = String.Format("{0}", reader["customer_phone"]);
-
-
-
-                }
-                else
-                {
-                    MessageBox.Show("查無此人!!");
-                    tbreceiver.Text = "";
-                    tbreceiverpost.Text = "";
-                    tbreceiveraddress.Text ="";
-                    tbreceiveremail.Text = "";
-                    tbreceiverphone.Text = "";
-
-
-
-                }
-                reader.Close();
-                con.Close();
-
-            }
-            else
-            {
-                MessageBox.Show("請輸入正確手機號碼");
-            }
-
-        }
+      
 
         private void detail_cellclick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1108,10 +1097,13 @@ namespace WindowsFormsApplication9
                 if (ifNum && a > 0)
                 {
                     //正確輸入
+                   
                     lblnodetail.Visible = false;
+                    lblnode.Visible = false;
                     dataGridView5.Visible = true;
                     showDataGridView5();//明細表資料
                     showtotal();
+                    shownodetail();
                 }
                 else
                 {
@@ -1304,7 +1296,7 @@ namespace WindowsFormsApplication9
             con.Open();
             string strSQL = "select '第一季' as 季數,sum(o.order_totalcost) as 營業額"
               +" from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
-             + " where (month(m.order_date) between '1' and '3') and year(m.order_date)=(case @searchyear when '' then year(getdate()) when null then year(getdate()) else  @searchyear end  )";
+             + " where (month(m.order_date) between '1' and '3') and year(m.order_date)=(case @searchyear when '' then year(getdate()) when null then year(getdate()) else  @searchyear end) and m.account_receive ='1.已收款'";
             SqlCommand cmd = new SqlCommand(strSQL, con);
             cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
             SqlDataReader reader = cmd.ExecuteReader();
@@ -1325,7 +1317,7 @@ namespace WindowsFormsApplication9
             con.Open();
             string strSQL = "select '第二季' as 季數,sum(o.order_totalcost) as 營業額"
               + " from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
-             + " where (month(m.order_date) between '4' and '6') and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end  )";
+             + " where (month(m.order_date) between '4' and '6') and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end ) and m.account_receive ='1.已收款'";
             SqlCommand cmd = new SqlCommand(strSQL, con);
             cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
             SqlDataReader reader = cmd.ExecuteReader();
@@ -1347,7 +1339,7 @@ namespace WindowsFormsApplication9
             con.Open();
             string strSQL = "select '第三季' as 季數,sum(o.order_totalcost) as 營業額"
               + " from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
-             + " where (month(m.order_date) between '7' and '9') and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end )";
+             + " where (month(m.order_date) between '7' and '9') and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end) and m.account_receive ='1.已收款'";
             SqlCommand cmd = new SqlCommand(strSQL, con);
             cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
             SqlDataReader reader = cmd.ExecuteReader();
@@ -1368,7 +1360,7 @@ namespace WindowsFormsApplication9
             con.Open();
             string strSQL = "select '第四季' as 季數,sum(o.order_totalcost) as 營業額"
               + " from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
-             + " where (month(m.order_date) between '10' and '12') and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end  )";
+             + " where (month(m.order_date) between '10' and '12') and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end ) andm.account_receive ='1.已收款'";
             SqlCommand cmd = new SqlCommand(strSQL, con);
             cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
             SqlDataReader reader = cmd.ExecuteReader();
@@ -1391,7 +1383,7 @@ namespace WindowsFormsApplication9
                 SqlConnection con = new SqlConnection(scsb.ToString());
                  con.Open();
                  string strSQL = "select sum(o.order_totalcost) as 營業額 from OrderMaster m join OrderDetail o"
-                 + " on o.order_no=m.order_no where month(m.order_date)=@searchmonth and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end  )";
+                 + " on o.order_no=m.order_no where month(m.order_date)=@searchmonth and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end ) and m.account_receive ='1.已收款'";
                  SqlCommand cmd = new SqlCommand(strSQL, con);
                  cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
                  cmd.Parameters.AddWithValue(@"searchmonth", month);
@@ -1415,7 +1407,7 @@ namespace WindowsFormsApplication9
             SqlConnection con = new SqlConnection(scsb.ToString());
             con.Open();
             string strSQL = "select sum(o.order_totalcost) as 營業額 from OrderMaster m join OrderDetail o"
-              + " on o.order_no=m.order_no where year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end  )";
+              + " on o.order_no=m.order_no where year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end ) and m.account_receive ='1.已收款'";
             SqlCommand cmd = new SqlCommand(strSQL, con);
             cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
             
@@ -1629,6 +1621,81 @@ namespace WindowsFormsApplication9
             
             }
         }
+
+        private void phone_indexchange(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(scsb.ToString());
+            con.Open();
+            string strSQL = "select*from customer where customer_name = @searchname";
+            SqlCommand cmd = new SqlCommand(strSQL, con);
+            cmd.Parameters.AddWithValue(@"searchname", cbox_recphone.Text);
+
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.Read())//有讀到資料
+            {
+                tbreceiver.Text = String.Format("{0}", reader["customer_name"]);
+                tbreceiverpost.Text = String.Format("{0}", reader["customer_post"]);
+                tbreceiveraddress.Text = String.Format("{0}", reader["customer_address"]);
+                tbreceiveremail.Text = String.Format("{0}", reader["customer_email"]);
+                tbreceiverphone.Text = String.Format("{0}", reader["customer_phone"]);
+
+
+
+            }
+            
+          
+            reader.Close();
+            con.Close();
+        }
+
+        private void btnO加入常客資料_Click_1(object sender, EventArgs e)
+        {
+            if (tbreceiverphone.Text.Length > 0)
+            {
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                string strSQL = "select*from customer where customer_phone = @searchphone";
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+                cmd.Parameters.AddWithValue(@"searchphone", tbreceiverphone.Text);
+
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())//有讀到資料
+                {
+                    tbreceiver.Text = String.Format("{0}", reader["customer_name"]);
+                    tbreceiverpost.Text = String.Format("{0}", reader["customer_post"]);
+                    tbreceiveraddress.Text = String.Format("{0}", reader["customer_address"]);
+                    tbreceiveremail.Text = String.Format("{0}", reader["customer_email"]);
+                    tbreceiverphone.Text = String.Format("{0}", reader["customer_phone"]);
+
+
+
+                }
+                else
+                {
+                    MessageBox.Show("查無此人!!");
+                    tbreceiver.Text = "";
+                    tbreceiverpost.Text = "";
+                    tbreceiveraddress.Text = "";
+                    tbreceiveremail.Text = "";
+                    tbreceiverphone.Text = "";
+
+
+
+                }
+                reader.Close();
+                con.Close();
+
+            }
+            else
+            {
+                MessageBox.Show("請輸入正確手機號碼");
+            }
+        }
+        
 
 
 

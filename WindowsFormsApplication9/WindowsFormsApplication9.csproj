@@ -56,10 +56,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Project1DataSet11.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Project1DataSet21.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Project1DataSet21.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Project1DataSet3.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Project1DataSet3.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Project1DataSet31.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Project1DataSet31.xsd</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -85,6 +95,17 @@
     <None Include="Project1DataSet11.xss">
       <DependentUpon>Project1DataSet11.xsd</DependentUpon>
     </None>
+    <None Include="Project1DataSet21.xsc">
+      <DependentUpon>Project1DataSet21.xsd</DependentUpon>
+    </None>
+    <None Include="Project1DataSet21.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Project1DataSet21.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Project1DataSet21.xss">
+      <DependentUpon>Project1DataSet21.xsd</DependentUpon>
+    </None>
     <None Include="Project1DataSet3.xsc">
       <DependentUpon>Project1DataSet3.xsd</DependentUpon>
     </None>
@@ -95,6 +116,17 @@
     </None>
     <None Include="Project1DataSet3.xss">
       <DependentUpon>Project1DataSet3.xsd</DependentUpon>
+    </None>
+    <None Include="Project1DataSet31.xsc">
+      <DependentUpon>Project1DataSet31.xsd</DependentUpon>
+    </None>
+    <None Include="Project1DataSet31.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Project1DataSet31.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Project1DataSet31.xss">
+      <DependentUpon>Project1DataSet31.xsd</DependentUpon>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
