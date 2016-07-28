@@ -26,7 +26,7 @@ namespace WindowsFormsApplication9
            
             this.customerTableAdapter.Fill(this.project1DataSet2.customer);//家用
             this.productTableAdapter.Fill(this.project1DataSet.Product);//家用
-         // this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
+          //this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
            
            
              scsb = new SqlConnectionStringBuilder();
@@ -71,7 +71,10 @@ namespace WindowsFormsApplication9
            
             if ((cboxAR.Text.Length>0) && (cboxorder_status.Text.Length>0) &&(cboxpaymethod.Text.Length >0) )
             {
-                double freight = Convert.ToDouble(tbfreight.Text);
+                double freight = 0;
+                if (tbfreight.Text == "") { freight = 0; }
+                else { freight = Convert.ToDouble(tbfreight.Text); }
+                
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
                 string strSQL = "insert into OrderMaster values (@Neworderdata,@Newshipdate,@shipcheckstatus,"
@@ -115,7 +118,9 @@ namespace WindowsFormsApplication9
         {
             if ((cboxAR.Text.Length > 0) && (cboxorder_status.Text.Length > 0) && (cboxpaymethod.Text.Length > 0))
             {
-                double freight = Convert.ToDouble(tbfreight.Text);
+                double freight = 0;
+                if (tbfreight.Text == "") { freight = 0; }
+                else { freight = Convert.ToDouble(tbfreight.Text); }
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
                 string strSQL = "update OrderMaster set order_date=@Neworderdata,"
@@ -343,8 +348,18 @@ namespace WindowsFormsApplication9
 
         private void btnP新增_Click(object sender, EventArgs e)
         {
-            if (tbproductname.Text.Length > 0)
+            if (tbproductname.Text.Length > 0 && tbproductcost.Text.Length > 0 && tbproductprice.Text.Length >0)
             {
+                double productcost = 0;
+                double productprice = 0;
+                if (tbproductcost.Text == "") {productcost = 0; }
+                else { productcost = Convert.ToDouble(tbproductcost.Text); }
+                if (tbproductprice.Text == "") { productprice = 0; }
+                else { productprice = Convert.ToDouble(tbproductprice.Text); }
+
+
+                
+               
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
                 string strSQL = "insert into Product values(@productname,@productspec,"
@@ -354,8 +369,8 @@ namespace WindowsFormsApplication9
                 SqlCommand cmd = new SqlCommand(strSQL, con);
                 cmd.Parameters.AddWithValue(@"productname", tbproductname.Text);
                 cmd.Parameters.AddWithValue(@"productspec", tbproductspec.Text);
-                cmd.Parameters.AddWithValue(@"productcost", tbproductcost.Text);
-                cmd.Parameters.AddWithValue(@"productprice", tbproductprice.Text);
+                cmd.Parameters.AddWithValue(@"productcost", productcost);
+                cmd.Parameters.AddWithValue(@"productprice", productprice);
                 
                 int rows = cmd.ExecuteNonQuery();//執行但不查詢  會回傳整數值(異動幾筆資料)
                 con.Close();
@@ -364,7 +379,7 @@ namespace WindowsFormsApplication9
             }
             else
             {
-                MessageBox.Show("請輸入產品名稱");
+                MessageBox.Show("請輸入完整資料");
 
 
             }
@@ -374,8 +389,12 @@ namespace WindowsFormsApplication9
         {
             if (tbproductname.Text.Length > 0)
             {
-                double productcost = Convert.ToDouble(tbproductcost.Text);
-                double productprice = Convert.ToDouble(tbproductprice.Text);
+                double productcost = 0;
+                double productprice = 0;
+                if (tbproductcost.Text == "") { productcost = 0; }
+                else { productcost = Convert.ToDouble(tbproductcost.Text); }
+                if (tbproductprice.Text == "") { productprice = 0; }
+                else { productprice = Convert.ToDouble(tbproductprice.Text); }
 
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
@@ -983,8 +1002,15 @@ namespace WindowsFormsApplication9
             {
                 dataGridView5.Visible = true;
                 double total = 0;
+                double qty = 0;
+                double orderqty = 0;
+                if (tbDPshipqty.Text == "") { qty = 0; }
+                else { qty = Convert.ToDouble(tbDPshipqty.Text); }
+
+                if (tbDPorderqty.Text == "") { orderqty = 0; }
+                else { orderqty = Convert.ToDouble(tbDPorderqty.Text); }
                 double price = Convert.ToDouble(tbDPprice.Text);
-                double qty = Convert.ToDouble(tbDPshipqty.Text);
+                
                 total = price * qty;
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
@@ -997,8 +1023,8 @@ namespace WindowsFormsApplication9
                 cmd.Parameters.AddWithValue(@"productno", tbDPp_no.Text);
                 cmd.Parameters.AddWithValue(@"productname", tbDPpname.Text);
                 cmd.Parameters.AddWithValue(@"unitprice", tbDPprice.Text);
-                cmd.Parameters.AddWithValue(@"orderqty", tbDPorderqty.Text);
-                cmd.Parameters.AddWithValue(@"ordershipqty", tbDPshipqty.Text);
+                cmd.Parameters.AddWithValue(@"orderqty", orderqty);
+                cmd.Parameters.AddWithValue(@"ordershipqty", qty);
                 cmd.Parameters.AddWithValue(@"total", total);
 
                 int rows = cmd.ExecuteNonQuery();//執行但不查詢  會回傳整數值(異動幾筆資料)
@@ -1057,8 +1083,13 @@ namespace WindowsFormsApplication9
             {
                 double total = 0;
                 double price = Convert.ToDouble(tbDPprice.Text);
-                double qty = Convert.ToDouble(tbDPshipqty.Text);
-                double orderqty = Convert.ToDouble(tbDPorderqty.Text);
+                double qty = 0;
+                double orderqty = 0;
+                if (tbDPshipqty.Text == "") { qty = 0; }
+                else { qty = Convert.ToDouble(tbDPshipqty.Text); }
+
+                if (tbDPorderqty.Text == "") { orderqty = 0; }
+                else { orderqty = Convert.ToDouble(tbDPorderqty.Text); }
                 total = price * qty;
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
@@ -1360,7 +1391,7 @@ namespace WindowsFormsApplication9
             con.Open();
             string strSQL = "select '第四季' as 季數,sum(o.order_totalcost) as 營業額"
               + " from OrderMaster m join OrderDetail o on o.order_no=m.order_no"
-             + " where (month(m.order_date) between '10' and '12') and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end ) andm.account_receive ='1.已收款'";
+             + " where (month(m.order_date) between '10' and '12') and year(m.order_date)=(case @searchyear when ''then year(getdate()) when null then year(getdate()) else  @searchyear end ) and m.account_receive ='1.已收款'";
             SqlCommand cmd = new SqlCommand(strSQL, con);
             cmd.Parameters.AddWithValue(@"searchyear", tbOyear.Text);
             SqlDataReader reader = cmd.ExecuteReader();
@@ -1573,12 +1604,19 @@ namespace WindowsFormsApplication9
                 case 2:
                 case 3:
                 case 4:
+                    label32.Visible = false;
+                    tbOyear.Visible = false;
+                    label33.Visible = false;
+                    cboxmonth.Visible = false;
+                      label34.Visible = false;
+                    tbsearchcus.Visible = false;
+                    break;
                 case 5:
                 case 6:
                 case 7:
                 case 8:
-                    label32.Visible = false;
-                    tbOyear.Visible = false;
+                    label32.Visible = true;
+                    tbOyear.Visible = true;
                     label33.Visible = false;
                     cboxmonth.Visible = false;
                       label34.Visible = false;
@@ -1616,6 +1654,15 @@ namespace WindowsFormsApplication9
                     label34.Visible = true;
                     tbsearchcus.Visible = true;
                     break;
+                case 13:
+                     label32.Visible = false;
+                    tbOyear.Visible = false;
+                    label33.Visible = false;
+                    cboxmonth.Visible = false;
+                    label34.Visible = false;
+                    tbsearchcus.Visible = false;
+                    break;
+
                 default:
                     break;
             
@@ -1693,6 +1740,49 @@ namespace WindowsFormsApplication9
             else
             {
                 MessageBox.Show("請輸入正確手機號碼");
+            }
+        }
+
+        private void search_cellclick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (cboxOsearch.SelectedIndex == 1 || cboxOsearch.SelectedIndex == 2 || cboxOsearch.SelectedIndex == 3 || cboxOsearch.SelectedIndex == 4)
+            {
+             if (e.RowIndex != -1)
+            {
+                string strQueryID = dataGridView3.Rows[e.RowIndex].Cells[0].Value.ToString();
+               
+
+                SqlConnection con = new SqlConnection(scsb.ToString());
+                con.Open();
+                
+             string strSQL = "select*from OrderMaster where order_no=@QUERYID"; 
+
+                SqlCommand cmd = new SqlCommand(strSQL, con);
+
+                cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    tborder_no.Text = String.Format("{0}", reader["order_no"]);
+                    tbfreight.Text = String.Format("{0}", reader["freight_fee"]);
+                    dtporderdata.Value = (DateTime)reader["order_date"];
+                    cboxpaymethod.Text = String.Format("{0}", reader["pay_method"]);
+                    cboxorder_status.Text = String.Format("{0}", reader["order_status"]);
+                    tbreceiver.Text = String.Format("{0}", reader["order_receiver"]);
+                    tbreceiveraddress.Text = String.Format("{0}", reader["receiver_address"]);
+                    tbreceiverphone.Text = String.Format("{0}", reader["order_phone"]);
+                    tbreceiverpost.Text = String.Format("{0}", reader["receiver_post"]);
+                    tbreceiveremail.Text = String.Format("{0}", reader["receiver_email"]);
+                    cboxAR.Text = String.Format("{0}", reader["account_receive"]);
+                    cboxshipcheckstatus.Text = String.Format("{0}", reader["order_shipcheckstatus"]);
+                    dtpshipdate.Value = (DateTime)reader["order_shipdate"];
+                    dtpclosedate.Value = (DateTime)reader["order_closedate"];
+                }
+                reader.Close();
+                con.Close();
+            }
+            
             }
         }
         

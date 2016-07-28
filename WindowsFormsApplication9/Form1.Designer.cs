@@ -31,6 +31,10 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
+            this.tbnodatail = new System.Windows.Forms.TextBox();
+            this.btnO加入常客資料 = new System.Windows.Forms.Button();
             this.btn查詢 = new System.Windows.Forms.Button();
             this.btn清空 = new System.Windows.Forms.Button();
             this.tabControl2 = new System.Windows.Forms.TabControl();
@@ -46,8 +50,8 @@
             this.btnDP修改 = new System.Windows.Forms.Button();
             this.btnDP新增 = new System.Windows.Forms.Button();
             this.cboxDPpname = new System.Windows.Forms.ComboBox();
-            this.productBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.project1DataSet = new WindowsFormsApplication9.Project1DataSet();
+            this.productBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.project1DataSet1 = new WindowsFormsApplication9.Project1DataSet1();
             this.tbDPshipqty = new System.Windows.Forms.TextBox();
             this.tbDPorderqty = new System.Windows.Forms.TextBox();
             this.tbDPp_no = new System.Windows.Forms.TextBox();
@@ -85,6 +89,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblnode = new System.Windows.Forms.Label();
             this.cboxorder_status = new System.Windows.Forms.ComboBox();
             this.cboxpaymethod = new System.Windows.Forms.ComboBox();
             this.dtporderdata = new System.Windows.Forms.DateTimePicker();
@@ -139,27 +144,22 @@
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.cboxOsearch = new System.Windows.Forms.ComboBox();
             this.btnO查詢 = new System.Windows.Forms.Button();
+            this.productBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.project1DataSet = new WindowsFormsApplication9.Project1DataSet();
             this.customerBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.project1DataSet2 = new WindowsFormsApplication9.Project1DataSet2();
-            this.productBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.project1DataSet1 = new WindowsFormsApplication9.Project1DataSet1();
             this.productTableAdapter = new WindowsFormsApplication9.Project1DataSetTableAdapters.ProductTableAdapter();
             this.productTableAdapter1 = new WindowsFormsApplication9.Project1DataSet1TableAdapters.ProductTableAdapter();
             this.customerTableAdapter = new WindowsFormsApplication9.Project1DataSet2TableAdapters.customerTableAdapter();
             this.customerTableAdapter1 = new WindowsFormsApplication9.Project1DataSet3TableAdapters.customerTableAdapter();
-            this.btnO加入常客資料 = new System.Windows.Forms.Button();
-            this.lblnode = new System.Windows.Forms.Label();
-            this.tbnodatail = new System.Windows.Forms.TextBox();
-            this.label35 = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabPage6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -172,10 +172,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.customerBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.project1DataSet2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -215,6 +215,46 @@
             this.tabPage1.Size = new System.Drawing.Size(1261, 681);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "訂單管理";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(453, 610);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(138, 26);
+            this.label36.TabIndex = 70;
+            this.label36.Text = "筆訂單無明細";
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(266, 609);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(96, 26);
+            this.label35.TabIndex = 69;
+            this.label35.Text = "目前尚有";
+            // 
+            // tbnodatail
+            // 
+            this.tbnodatail.BackColor = System.Drawing.Color.Yellow;
+            this.tbnodatail.Enabled = false;
+            this.tbnodatail.ForeColor = System.Drawing.Color.Red;
+            this.tbnodatail.Location = new System.Drawing.Point(372, 606);
+            this.tbnodatail.Name = "tbnodatail";
+            this.tbnodatail.Size = new System.Drawing.Size(63, 35);
+            this.tbnodatail.TabIndex = 68;
+            // 
+            // btnO加入常客資料
+            // 
+            this.btnO加入常客資料.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnO加入常客資料.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.btnO加入常客資料.Location = new System.Drawing.Point(634, 314);
+            this.btnO加入常客資料.Name = "btnO加入常客資料";
+            this.btnO加入常客資料.Size = new System.Drawing.Size(176, 30);
+            this.btnO加入常客資料.TabIndex = 67;
+            this.btnO加入常客資料.Text = "加入常客資料";
+            this.btnO加入常客資料.UseVisualStyleBackColor = false;
+            this.btnO加入常客資料.Click += new System.EventHandler(this.btnO加入常客資料_Click_1);
             // 
             // btn查詢
             // 
@@ -389,6 +429,7 @@
             // 
             this.cboxDPpname.DataSource = this.productBindingSource;
             this.cboxDPpname.DisplayMember = "product_name";
+            this.cboxDPpname.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxDPpname.FormattingEnabled = true;
             this.cboxDPpname.Location = new System.Drawing.Point(935, 63);
             this.cboxDPpname.Name = "cboxDPpname";
@@ -396,15 +437,15 @@
             this.cboxDPpname.TabIndex = 66;
             this.cboxDPpname.SelectedIndexChanged += new System.EventHandler(this.datail_selectchange);
             // 
-            // productBindingSource
+            // productBindingSource1
             // 
-            this.productBindingSource.DataMember = "Product";
-            this.productBindingSource.DataSource = this.project1DataSet;
+            this.productBindingSource1.DataMember = "Product";
+            this.productBindingSource1.DataSource = this.project1DataSet1;
             // 
-            // project1DataSet
+            // project1DataSet1
             // 
-            this.project1DataSet.DataSetName = "Project1DataSet";
-            this.project1DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            this.project1DataSet1.DataSetName = "Project1DataSet1";
+            this.project1DataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // tbDPshipqty
             // 
@@ -647,6 +688,7 @@
             // 
             this.cbox_recphone.DataSource = this.customerBindingSource;
             this.cbox_recphone.DisplayMember = "customer_name";
+            this.cbox_recphone.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbox_recphone.FormattingEnabled = true;
             this.cbox_recphone.Location = new System.Drawing.Point(287, 137);
             this.cbox_recphone.Name = "cbox_recphone";
@@ -767,6 +809,15 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "訂單主檔";
+            // 
+            // lblnode
+            // 
+            this.lblnode.ForeColor = System.Drawing.Color.Red;
+            this.lblnode.Location = new System.Drawing.Point(263, 34);
+            this.lblnode.Name = "lblnode";
+            this.lblnode.Size = new System.Drawing.Size(93, 27);
+            this.lblnode.TabIndex = 10;
+            this.lblnode.Text = "*無明細*";
             // 
             // cboxorder_status
             // 
@@ -1338,6 +1389,7 @@
             this.dataGridView3.RowTemplate.Height = 24;
             this.dataGridView3.Size = new System.Drawing.Size(1237, 542);
             this.dataGridView3.TabIndex = 61;
+            this.dataGridView3.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.search_cellclick);
             // 
             // cboxOsearch
             // 
@@ -1376,6 +1428,16 @@
             this.btnO查詢.UseVisualStyleBackColor = false;
             this.btnO查詢.Click += new System.EventHandler(this.btnO查詢_Click_1);
             // 
+            // productBindingSource
+            // 
+            this.productBindingSource.DataMember = "Product";
+            this.productBindingSource.DataSource = this.project1DataSet;
+            // 
+            // project1DataSet
+            // 
+            this.project1DataSet.DataSetName = "Project1DataSet";
+            this.project1DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
             // customerBindingSource
             // 
             this.customerBindingSource.DataMember = "customer";
@@ -1385,16 +1447,6 @@
             // 
             this.project1DataSet2.DataSetName = "Project1DataSet2";
             this.project1DataSet2.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // productBindingSource1
-            // 
-            this.productBindingSource1.DataMember = "Product";
-            this.productBindingSource1.DataSource = this.project1DataSet1;
-            // 
-            // project1DataSet1
-            // 
-            this.project1DataSet1.DataSetName = "Project1DataSet1";
-            this.project1DataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // productTableAdapter
             // 
@@ -1411,55 +1463,6 @@
             // customerTableAdapter1
             // 
             this.customerTableAdapter1.ClearBeforeFill = true;
-            // 
-            // btnO加入常客資料
-            // 
-            this.btnO加入常客資料.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.btnO加入常客資料.Font = new System.Drawing.Font("微軟正黑體", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnO加入常客資料.Location = new System.Drawing.Point(634, 314);
-            this.btnO加入常客資料.Name = "btnO加入常客資料";
-            this.btnO加入常客資料.Size = new System.Drawing.Size(176, 30);
-            this.btnO加入常客資料.TabIndex = 67;
-            this.btnO加入常客資料.Text = "加入常客資料";
-            this.btnO加入常客資料.UseVisualStyleBackColor = false;
-            this.btnO加入常客資料.Click += new System.EventHandler(this.btnO加入常客資料_Click_1);
-            // 
-            // lblnode
-            // 
-            this.lblnode.ForeColor = System.Drawing.Color.Red;
-            this.lblnode.Location = new System.Drawing.Point(263, 34);
-            this.lblnode.Name = "lblnode";
-            this.lblnode.Size = new System.Drawing.Size(93, 27);
-            this.lblnode.TabIndex = 10;
-            this.lblnode.Text = "*無明細*";
-            // 
-            // tbnodatail
-            // 
-            this.tbnodatail.BackColor = System.Drawing.Color.Yellow;
-            this.tbnodatail.Enabled = false;
-            this.tbnodatail.ForeColor = System.Drawing.Color.Red;
-            this.tbnodatail.Location = new System.Drawing.Point(372, 606);
-            this.tbnodatail.Name = "tbnodatail";
-            this.tbnodatail.Size = new System.Drawing.Size(63, 35);
-            this.tbnodatail.TabIndex = 68;
-            // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(266, 609);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(96, 26);
-            this.label35.TabIndex = 69;
-            this.label35.Text = "目前尚有";
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(453, 610);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(138, 26);
-            this.label36.TabIndex = 70;
-            this.label36.Text = "筆訂單無明細";
             // 
             // Form1
             // 
@@ -1479,8 +1482,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -1499,10 +1502,10 @@
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.customerBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.project1DataSet2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.productBindingSource1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.project1DataSet1)).EndInit();
             this.ResumeLayout(false);
 
         }
