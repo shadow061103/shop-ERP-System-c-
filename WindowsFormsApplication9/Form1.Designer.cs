@@ -41,6 +41,10 @@
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.btnshipqty2 = new System.Windows.Forms.Button();
+            this.btnshipqty1 = new System.Windows.Forms.Button();
+            this.btnorderqty2 = new System.Windows.Forms.Button();
+            this.btnorderqty1 = new System.Windows.Forms.Button();
             this.lblnodetail = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.tbDPprice = new System.Windows.Forms.TextBox();
@@ -190,6 +194,7 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1269, 720);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabchange);
             // 
             // tabPage1
             // 
@@ -319,6 +324,10 @@
             // tabPage6
             // 
             this.tabPage6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.tabPage6.Controls.Add(this.btnshipqty2);
+            this.tabPage6.Controls.Add(this.btnshipqty1);
+            this.tabPage6.Controls.Add(this.btnorderqty2);
+            this.tabPage6.Controls.Add(this.btnorderqty1);
             this.tabPage6.Controls.Add(this.lblnodetail);
             this.tabPage6.Controls.Add(this.label31);
             this.tabPage6.Controls.Add(this.tbDPprice);
@@ -342,6 +351,50 @@
             this.tabPage6.Size = new System.Drawing.Size(1221, 215);
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "訂單明細";
+            // 
+            // btnshipqty2
+            // 
+            this.btnshipqty2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnshipqty2.Location = new System.Drawing.Point(974, 172);
+            this.btnshipqty2.Name = "btnshipqty2";
+            this.btnshipqty2.Size = new System.Drawing.Size(48, 35);
+            this.btnshipqty2.TabIndex = 77;
+            this.btnshipqty2.Text = "+";
+            this.btnshipqty2.UseVisualStyleBackColor = false;
+            this.btnshipqty2.Click += new System.EventHandler(this.btnshipqty2_Click);
+            // 
+            // btnshipqty1
+            // 
+            this.btnshipqty1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnshipqty1.Location = new System.Drawing.Point(920, 172);
+            this.btnshipqty1.Name = "btnshipqty1";
+            this.btnshipqty1.Size = new System.Drawing.Size(48, 35);
+            this.btnshipqty1.TabIndex = 76;
+            this.btnshipqty1.Text = "-";
+            this.btnshipqty1.UseVisualStyleBackColor = false;
+            this.btnshipqty1.Click += new System.EventHandler(this.btnshipqty1_Click);
+            // 
+            // btnorderqty2
+            // 
+            this.btnorderqty2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnorderqty2.Location = new System.Drawing.Point(974, 131);
+            this.btnorderqty2.Name = "btnorderqty2";
+            this.btnorderqty2.Size = new System.Drawing.Size(48, 35);
+            this.btnorderqty2.TabIndex = 75;
+            this.btnorderqty2.Text = "+";
+            this.btnorderqty2.UseVisualStyleBackColor = false;
+            this.btnorderqty2.Click += new System.EventHandler(this.btnorderqty2_Click);
+            // 
+            // btnorderqty1
+            // 
+            this.btnorderqty1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnorderqty1.Location = new System.Drawing.Point(920, 131);
+            this.btnorderqty1.Name = "btnorderqty1";
+            this.btnorderqty1.Size = new System.Drawing.Size(48, 35);
+            this.btnorderqty1.TabIndex = 74;
+            this.btnorderqty1.Text = "-";
+            this.btnorderqty1.UseVisualStyleBackColor = false;
+            this.btnorderqty1.Click += new System.EventHandler(this.btnorderqty1_Click);
             // 
             // lblnodetail
             // 
@@ -431,7 +484,7 @@
             this.cboxDPpname.DisplayMember = "product_name";
             this.cboxDPpname.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxDPpname.FormattingEnabled = true;
-            this.cboxDPpname.Location = new System.Drawing.Point(935, 63);
+            this.cboxDPpname.Location = new System.Drawing.Point(940, 38);
             this.cboxDPpname.Name = "cboxDPpname";
             this.cboxDPpname.Size = new System.Drawing.Size(150, 34);
             this.cboxDPpname.TabIndex = 66;
@@ -453,6 +506,7 @@
             this.tbDPshipqty.Name = "tbDPshipqty";
             this.tbDPshipqty.Size = new System.Drawing.Size(100, 35);
             this.tbDPshipqty.TabIndex = 65;
+            this.tbDPshipqty.Text = "0";
             this.tbDPshipqty.TextChanged += new System.EventHandler(this.shipqty_textchange);
             // 
             // tbDPorderqty
@@ -461,6 +515,7 @@
             this.tbDPorderqty.Name = "tbDPorderqty";
             this.tbDPorderqty.Size = new System.Drawing.Size(100, 35);
             this.tbDPorderqty.TabIndex = 64;
+            this.tbDPorderqty.Text = "0";
             this.tbDPorderqty.TextChanged += new System.EventHandler(this.orderqty_textchange);
             // 
             // tbDPp_no
@@ -726,6 +781,7 @@
             this.tbreceiverpost.Name = "tbreceiverpost";
             this.tbreceiverpost.Size = new System.Drawing.Size(100, 35);
             this.tbreceiverpost.TabIndex = 8;
+            this.tbreceiverpost.TextChanged += new System.EventHandler(this.post_textchange);
             // 
             // tbreceiverphone
             // 
@@ -1038,6 +1094,7 @@
             this.tbcustomerpost.Name = "tbcustomerpost";
             this.tbcustomerpost.Size = new System.Drawing.Size(100, 35);
             this.tbcustomerpost.TabIndex = 13;
+            this.tbcustomerpost.TextChanged += new System.EventHandler(this.post1textchange);
             // 
             // tbcustomerphone
             // 
@@ -1635,6 +1692,10 @@
         private System.Windows.Forms.TextBox tbnodatail;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.Button btnorderqty2;
+        private System.Windows.Forms.Button btnorderqty1;
+        private System.Windows.Forms.Button btnshipqty2;
+        private System.Windows.Forms.Button btnshipqty1;
     }
 }
 

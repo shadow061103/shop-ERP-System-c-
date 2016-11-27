@@ -13,6 +13,7 @@ namespace WindowsFormsApplication9
 {
     public partial class Form1 : Form
     {
+        int orderqty, shipqty;
         SqlConnectionStringBuilder scsb;
         public Form1()
         {
@@ -22,16 +23,16 @@ namespace WindowsFormsApplication9
         private void Form1_Load(object sender, EventArgs e)
         {
   
-           // this.customerTableAdapter1.Fill(this.project1DataSet3.customer);//資策會
+            //this.customerTableAdapter1.Fill(this.project1DataSet3.customer);//資策會
            
             this.customerTableAdapter.Fill(this.project1DataSet2.customer);//家用
-            this.productTableAdapter.Fill(this.project1DataSet.Product);//家用
-          //this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
+           this.productTableAdapter.Fill(this.project1DataSet.Product);//家用
+//this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
            
            
              scsb = new SqlConnectionStringBuilder();
            
-            //scsb.DataSource = "CR1-16";
+           // scsb.DataSource = "CR1-16";
             scsb.DataSource = "KUANFU-PC\\SQLEXPRESS";
             scsb.InitialCatalog = "Project1";
             scsb.IntegratedSecurity = true;
@@ -215,7 +216,7 @@ namespace WindowsFormsApplication9
 
         private void btnC新增_Click(object sender, EventArgs e)
         {
-            if (tbcustomer.Text.Length > 0)
+            if (tbcustomer.Text.Length > 0 && tbcustomerphone.Text.Length>0)
             {
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
@@ -235,7 +236,7 @@ namespace WindowsFormsApplication9
             }
             else
             {
-                MessageBox.Show("請輸入客戶姓名");
+                MessageBox.Show("請輸入客戶姓名、電話");
 
 
             }
@@ -243,7 +244,7 @@ namespace WindowsFormsApplication9
 
         private void btnC修改_Click(object sender, EventArgs e)
         {//
-            if (tbcustomer.Text.Length > 0)
+            if (tbcustomer.Text.Length > 0 && tbcustomerphone.Text.Length > 0)
             {
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
@@ -266,7 +267,7 @@ namespace WindowsFormsApplication9
             }
             else
             {
-                MessageBox.Show("請輸入姓名");
+                MessageBox.Show("請輸入姓名、手機");
 
 
             }
@@ -387,7 +388,7 @@ namespace WindowsFormsApplication9
 
         private void btnP修改_Click(object sender, EventArgs e)
         {
-            if (tbproductname.Text.Length > 0)
+            if (tbproductname.Text.Length > 0 && tbproductcost.Text.Length > 0 && tbproductprice.Text.Length > 0)
             {
                 double productcost = 0;
                 double productprice = 0;
@@ -415,7 +416,7 @@ namespace WindowsFormsApplication9
             }
             else
             {
-                MessageBox.Show("請輸入產品名稱");
+                MessageBox.Show("請輸入產品名稱、成本、單價");
 
 
             }
@@ -497,7 +498,7 @@ namespace WindowsFormsApplication9
             }
             else
             {
-                MessageBox.Show("請輸入姓名搜尋");
+                MessageBox.Show("請輸入產品名稱搜尋");
             }
 
         }
@@ -525,7 +526,8 @@ namespace WindowsFormsApplication9
         {
             SqlConnection con = new SqlConnection(scsb.ToString());
             con.Open();
-            string strSQL = "select*from Product where product_name like  '%"+tbproductname.Text+"%'";
+            string strSQL = "select  product_no as 產品編號,product_name as 產品名稱,product_spec as 產品規格,"
++"product_cost as 產品成本,product_price 產品價格 from Product where product_name like  '%"+tbproductname.Text+"%'";
             SqlCommand cmd = new SqlCommand(strSQL, con);
             
             SqlDataReader reader = cmd.ExecuteReader();
@@ -907,6 +909,8 @@ namespace WindowsFormsApplication9
 
         private void btn清空_Click(object sender, EventArgs e)
         {
+            tbDPorderqty.Text = "0";
+            tbDPshipqty.Text = "0";
             tborder_no.Text = "";
             tbfreight.Text = "";
             dtporderdata.Value = DateTime.Now;
@@ -933,8 +937,9 @@ namespace WindowsFormsApplication9
 
                 SqlConnection con = new SqlConnection(scsb.ToString());
                 con.Open();
-                string strSQL = "select*from OrderDetail where product_no=@QUERYID";
+                string strSQL = "select*from OrderDetail where product_no=@QUERYID and order_no=@orderno";
                 SqlCommand cmd = new SqlCommand(strSQL, con);
+                cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
 
                 cmd.Parameters.AddWithValue(@"QUERYID", strQueryID);
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -1032,6 +1037,7 @@ namespace WindowsFormsApplication9
                 MessageBox.Show(String.Format("資料更新完畢,共影響{0}筆資料", rows));
                 showDataGridView5();
                 showtotal();
+                shownodetail();
             }
             else
             {
@@ -1053,22 +1059,23 @@ namespace WindowsFormsApplication9
             {
                 SqlConnection con = new SqlConnection(scsb.ToString());
                  con.Open();
-                 string strSQL = "delete from OrderDetail where product_name=@OldName";
+                 string strSQL = "delete from OrderDetail  where order_no=@orderno and product_no=@Searchproductno";
                  SqlCommand cmd = new SqlCommand(strSQL, con);
-                 cmd.Parameters.AddWithValue("@OldName", tbDPpname.Text);
+                 cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
+                 cmd.Parameters.AddWithValue(@"Searchproductno", tbDPp_no.Text);
 
                  int rows = cmd.ExecuteNonQuery();
-                 showtotal();
+                 
                  con.Close();
                  MessageBox.Show(String.Format("資料刪除完畢,共影響{0}筆資料", rows));
 
-                tborder_no.Text="";
-                tbDPp_no.Text="";
-                tbDPpname.Text="";
-                tbDPprice.Text="";
-                tbDPorderqty.Text="";
-                tbDPshipqty.Text = "";
+               
+               
+                tbDPorderqty.Text="0";
+                tbDPshipqty.Text = "0";
                 showDataGridView5();
+                shownodetail();
+                showtotal();
             }
             else
             {
@@ -1095,12 +1102,13 @@ namespace WindowsFormsApplication9
                 con.Open();
                 string strSQL = "update OrderDetail set  order_qty=(case @orderqty when null then 0 when '' then 0 else @orderqty end),"
                   + "order_shipqty=(case @ordershipqty when null then 0 when '' then 0 else @ordershipqty end)"
-                  +",order_totalcost=@Newctotalcost where product_no=@Searchproductno";
+                  + ",order_totalcost=@Newctotalcost where product_no=@Searchproductno and order_no=@orderno";
 
                 SqlCommand cmd = new SqlCommand(strSQL, con);
                 cmd.Parameters.AddWithValue(@"orderqty", orderqty);
                 cmd.Parameters.AddWithValue(@"ordershipqty", qty);
                 cmd.Parameters.AddWithValue(@"Searchproductno",tbDPp_no.Text );
+                cmd.Parameters.AddWithValue(@"orderno", tborder_no.Text);
                 cmd.Parameters.AddWithValue(@"Newctotalcost", total);
 
                 int rows = cmd.ExecuteNonQuery();//執行但不查詢  會回傳整數值(異動幾筆資料)
@@ -1108,6 +1116,7 @@ namespace WindowsFormsApplication9
                 MessageBox.Show(String.Format("資料更新完畢,共影響{0}筆資料", rows));
                 showDataGridView5();
                 showtotal();
+                shownodetail();
             }
             else
             {
@@ -1168,42 +1177,48 @@ namespace WindowsFormsApplication9
 
         private void orderqty_textchange(object sender, EventArgs e)
         {
-            Double a;
+
             if (tbDPorderqty.Text.Length > 0)
             {
-                bool ifNum = Double.TryParse(tbDPorderqty.Text, out a);
-                if (ifNum && a >= 0)
+                bool ifNum = Int32.TryParse(tbDPorderqty.Text, out orderqty);
+                if (ifNum && orderqty >= 0)
                 {
                     //正確輸入
+                    btnorderqty1.Enabled = true;
 
                 }
                 else
                 {
                     //錯誤輸入
                     MessageBox.Show("號碼輸入錯誤!!", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    tbDPorderqty.Text = "";
+                    tbDPorderqty.Text = "0";
+                    orderqty = 0;
                 }
             }
+            else { orderqty = 0; }
+
         }
 
         private void shipqty_textchange(object sender, EventArgs e)
         {
-            Double a;
+
             if (tbDPshipqty.Text.Length > 0)
             {
-                bool ifNum = Double.TryParse(tbDPshipqty.Text, out a);
-                if (ifNum && a >= 0)
+                bool ifNum = Int32.TryParse(tbDPshipqty.Text, out shipqty);
+                if (ifNum && shipqty >= 0)
                 {
                     //正確輸入
-
+                    btnshipqty1.Enabled = true;
                 }
                 else
                 {
                     //錯誤輸入
                     MessageBox.Show("號碼輸入錯誤!!", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    tbDPshipqty.Text = "";
+                    tbDPshipqty.Text = "0";
+                    shipqty = 0;
                 }
             }
+            else { shipqty = 0; }
         }
 
         private void cost_textchange(object sender, EventArgs e)
@@ -1785,6 +1800,69 @@ namespace WindowsFormsApplication9
             
             }
         }
+
+        private void btnorderqty2_Click(object sender, EventArgs e)
+        {
+            orderqty += 1;
+            btnorderqty1.Enabled = true;
+            tbDPorderqty.Text = orderqty.ToString();
+        }
+
+        private void btnshipqty2_Click(object sender, EventArgs e)
+        {
+            shipqty += 1;
+            btnshipqty1.Enabled = true;
+            tbDPshipqty.Text = shipqty.ToString();
+        }
+
+        private void btnorderqty1_Click(object sender, EventArgs e)
+        {
+            orderqty -= 1;
+            if (orderqty < 0) {
+                orderqty = 0;
+                btnorderqty1.Enabled = false;
+            }
+            tbDPorderqty.Text = orderqty.ToString();
+       }
+
+        private void btnshipqty1_Click(object sender, EventArgs e)
+        {
+            shipqty -= 1;
+            if(shipqty<0){
+                shipqty = 0;
+                btnshipqty1.Enabled = false;
+            }
+            tbDPshipqty.Text = shipqty.ToString();
+        }
+
+        private void post_textchange(object sender, EventArgs e)
+        {
+            if (tbreceiverpost.Text.Length >= 0 && tbreceiverpost.Text.Length <= 5)
+            { }
+            else { MessageBox.Show("輸入錯誤");
+            tbreceiverpost.Text = "";
+            }
+        }
+
+        private void tabchange(object sender, EventArgs e)
+        {
+            //this.customerTableAdapter1.Fill(this.project1DataSet3.customer);//資策會
+
+            this.customerTableAdapter.Fill(this.project1DataSet2.customer);//家用
+            this.productTableAdapter.Fill(this.project1DataSet.Product);//家用
+           // this.productTableAdapter1.Fill(this.project1DataSet1.Product);//資策會
+        }
+
+        private void post1textchange(object sender, EventArgs e)
+        {
+            if (tbcustomerpost.Text.Length >= 0 && tbcustomerpost.Text.Length <= 5)
+            { }
+            else { MessageBox.Show("輸入錯誤");
+            tbcustomerpost.Text = "";
+            }
+        }
+
+
         
 
 
